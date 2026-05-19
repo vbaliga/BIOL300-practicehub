@@ -3,10 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 
-const GOLD        = "#c6973f";
-const GOLD_LIGHT  = "#e8c27a";
-const BLUE        = "#002145";
-const BLUE_DARK   = "#001830";
+const GOLD        = "var(--gold)";
+const GOLD_LIGHT  = "var(--gold-light)";
+const BLUE        = "var(--surface)";
+const BLUE_DARK   = "var(--bg)";
 
 // ─── PITFALL DATA ─────────────────────────────────────────────────────────────
 
@@ -120,23 +120,23 @@ function ScenarioCard({ s }: { s: Scenario }) {
   const correct = choice === s.correctAnswer;
 
   return (
-    <div style={{ borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.025)", padding: "20px 22px", marginBottom: 14 }}>
-      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", lineHeight: 1.65, margin: "0 0 18px", fontStyle: "italic" }}>
+    <div style={{ borderRadius: 12, border: "1px solid rgba(var(--text-rgb),0.08)", background: "rgba(var(--text-rgb),0.025)", padding: "20px 22px", marginBottom: 14 }}>
+      <p style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.75)", lineHeight: 1.65, margin: "0 0 18px", fontStyle: "italic" }}>
         {s.premise}
       </p>
       <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 14 }}>
         {(["A", "B"] as const).map(opt => {
           const isCorrect = opt === s.correctAnswer;
           const chosen = choice === opt;
-          let border = "rgba(255,255,255,0.12)";
+          let border = "rgba(var(--text-rgb),0.12)";
           let bg = "transparent";
-          let color = "rgba(255,255,255,0.6)";
+          let color = "rgba(var(--text-rgb),0.6)";
           if (revealed) {
             if (isCorrect)    { border = "rgba(134,197,120,0.55)"; bg = "rgba(134,197,120,0.08)"; color = "#a8e09a"; }
             else if (chosen)  { border = "rgba(220,80,80,0.5)"; bg = "rgba(220,80,80,0.07)"; color = "rgba(255,130,130,0.9)"; }
-            else              { color = "rgba(255,255,255,0.2)"; }
+            else              { color = "rgba(var(--text-rgb),0.2)"; }
           } else if (chosen) {
-            border = "rgba(198,151,63,0.5)"; bg = "rgba(198,151,63,0.08)"; color = GOLD_LIGHT;
+            border = "rgba(var(--gold-rgb),0.5)"; bg = "rgba(var(--gold-rgb),0.08)"; color = GOLD_LIGHT;
           }
           return (
             <button
@@ -160,7 +160,7 @@ function ScenarioCard({ s }: { s: Scenario }) {
           <p style={{ fontSize: 12, fontWeight: 700, color: correct ? "#a8e09a" : "rgba(255,130,130,0.9)", margin: "0 0 6px" }}>
             {correct ? "Correct!" : `Incorrect — the better statement is ${s.correctAnswer}`}
           </p>
-          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", lineHeight: 1.6, margin: 0 }}>{s.explanation}</p>
+          <p style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.55)", lineHeight: 1.6, margin: 0 }}>{s.explanation}</p>
         </div>
       )}
     </div>
@@ -176,13 +176,13 @@ export default function PitfallsPage() {
     <div style={{ minHeight: "100vh", background: BLUE_DARK }}>
 
       {/* Nav */}
-      <header style={{ background: BLUE, borderBottom: "1px solid rgba(198,151,63,0.18)", position: "sticky", top: 0, zIndex: 50 }}>
+      <header style={{ background: BLUE, borderBottom: "1px solid rgba(var(--gold-rgb),0.18)", position: "sticky", top: 0, zIndex: 50 }}>
         <div style={{ maxWidth: 820, margin: "0 auto", padding: "0 24px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 3, height: 20, borderRadius: 2, background: GOLD, flexShrink: 0 }} />
             <Link href="/" style={{ fontSize: 14, fontWeight: 700, color: GOLD, textDecoration: "none" }}>BIOL 300 Practice Hub</Link>
-            <span style={{ color: "rgba(255,255,255,0.2)", fontSize: 14 }}>/</span>
-            <span style={{ fontSize: 13, color: "rgba(255,255,255,0.55)" }}>Statistical Pitfalls</span>
+            <span style={{ color: "rgba(var(--text-rgb),0.2)", fontSize: 14 }}>/</span>
+            <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>Statistical Pitfalls</span>
           </div>
           <Link href="/practice" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practice →</Link>
         </div>
@@ -191,9 +191,9 @@ export default function PitfallsPage() {
       <main style={{ maxWidth: 820, margin: "0 auto", padding: "36px 24px 72px" }}>
 
         <div style={{ marginBottom: 32 }}>
-          <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(198,151,63,0.55)", margin: "0 0 8px" }}>Common Misconceptions</p>
-          <h1 style={{ fontSize: 28, fontWeight: 800, color: "#fff", letterSpacing: "-0.025em", margin: "0 0 8px" }}>Statistical Pitfalls</h1>
-          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.38)", margin: 0 }}>
+          <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(var(--gold-rgb),0.55)", margin: "0 0 8px" }}>Common Misconceptions</p>
+          <h1 style={{ fontSize: 28, fontWeight: 800, color: "var(--text)", letterSpacing: "-0.025em", margin: "0 0 8px" }}>Statistical Pitfalls</h1>
+          <p style={{ fontSize: 14, color: "rgba(var(--text-rgb),0.38)", margin: 0 }}>
             Four misconceptions that appear frequently on exams — and in published papers. Click a pitfall to expand it, then test yourself with the scenarios below.
           </p>
         </div>
@@ -203,7 +203,7 @@ export default function PitfallsPage() {
           {PITFALLS.map(p => {
             const open = activeId === p.id;
             return (
-              <div key={p.id} style={{ borderRadius: 12, border: `1px solid ${open ? "rgba(198,151,63,0.35)" : "rgba(255,255,255,0.07)"}`, background: open ? "rgba(198,151,63,0.05)" : "rgba(255,255,255,0.02)", overflow: "hidden", transition: "border-color 0.2s, background 0.2s" }}>
+              <div key={p.id} style={{ borderRadius: 12, border: `1px solid ${open ? "rgba(var(--gold-rgb),0.35)" : "rgba(var(--text-rgb),0.07)"}`, background: open ? "rgba(var(--gold-rgb),0.05)" : "rgba(var(--text-rgb),0.02)", overflow: "hidden", transition: "border-color 0.2s, background 0.2s" }}>
                 <button
                   type="button"
                   onClick={() => setActiveId(open ? null : p.id)}
@@ -211,9 +211,9 @@ export default function PitfallsPage() {
                 >
                   <div>
                     <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(220,80,80,0.7)", marginBottom: 5 }}>Misconception</div>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: open ? "#fff" : "rgba(255,255,255,0.75)", lineHeight: 1.45 }}>{p.title}</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: open ? "var(--text)" : "rgba(var(--text-rgb),0.75)", lineHeight: 1.45 }}>{p.title}</div>
                     {!open && (
-                      <div style={{ marginTop: 6, fontSize: 12, color: "rgba(255,255,255,0.3)", fontStyle: "italic", lineHeight: 1.4 }}>
+                      <div style={{ marginTop: 6, fontSize: 12, color: "rgba(var(--text-rgb),0.3)", fontStyle: "italic", lineHeight: 1.4 }}>
                         {p.misconception}
                       </div>
                     )}
@@ -245,7 +245,7 @@ export default function PitfallsPage() {
                     {p.tip && (
                       <div style={{ marginTop: 12, display: "flex", gap: 10, alignItems: "flex-start" }}>
                         <span style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: GOLD, opacity: 0.7, flexShrink: 0, marginTop: 1 }}>Tip</span>
-                        <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, margin: 0 }}>{p.tip}</p>
+                        <p style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.45)", lineHeight: 1.6, margin: 0 }}>{p.tip}</p>
                       </div>
                     )}
                   </div>
@@ -259,17 +259,17 @@ export default function PitfallsPage() {
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
             <div style={{ width: 3, height: 18, borderRadius: 2, background: GOLD, flexShrink: 0 }} />
-            <h2 style={{ fontSize: 16, fontWeight: 700, color: "rgba(255,255,255,0.85)", margin: 0 }}>Evaluate these conclusions</h2>
-            <div style={{ flex: 1, height: 1, background: "rgba(198,151,63,0.1)" }} />
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: "rgba(var(--text-rgb),0.85)", margin: 0 }}>Evaluate these conclusions</h2>
+            <div style={{ flex: 1, height: 1, background: "rgba(var(--gold-rgb),0.1)" }} />
           </div>
-          <p style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", margin: "0 0 20px", lineHeight: 1.55 }}>
+          <p style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.35)", margin: "0 0 20px", lineHeight: 1.55 }}>
             Two researchers write up the same result differently. Which statement is more appropriate?
           </p>
           {SCENARIOS.map(s => <ScenarioCard key={s.id} s={s} />)}
         </div>
 
-        <footer style={{ marginTop: 32, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,0.2)", paddingBottom: 16 }}>
-          BIOL 300 Practice Hub · Whitlock &amp; Schluter, 3rd ed. · UBC &nbsp;·&nbsp;
+        <footer style={{ marginTop: 32, textAlign: "center", fontSize: 11, color: "rgba(var(--text-rgb),0.2)", paddingBottom: 16 }}>
+          BIOL 300 Practice Hub · UBC &nbsp;·&nbsp;
           <Link href="/" style={{ color: GOLD, textDecoration: "none", opacity: 0.7 }}>Home</Link>
         </footer>
       </main>

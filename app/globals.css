@@ -2,10 +2,36 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+html { zoom: 1.2; }
+
+:root {
+  --bg:          #001830;
+  --surface:     #002145;
+  --surface-mid: #00274d;
+  --gold:        #c6973f;
+  --gold-light:  #e8c27a;
+  --gold-rgb:    198, 151, 63;
+  --text-rgb:    255, 255, 255;
+  --text:        #ffffff;
+}
+
+[data-theme="light"] {
+  --bg:          #f5f2eb;
+  --surface:     #ffffff;
+  --surface-mid: #ece8df;
+  --gold:        #8b5e00;
+  --gold-light:  #a07000;
+  --gold-rgb:    139, 94, 0;
+  --text-rgb:    0, 24, 48;
+  --text:        #001830;
+}
+
 body {
   margin: 0;
   font-family: ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .katex { color: inherit; }

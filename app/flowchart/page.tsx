@@ -24,11 +24,11 @@ import {
   type FlowNode, type FlowOption,
 } from "../lib/flowchartData";
 
-const GOLD        = "#c6973f";
-const GOLD_LIGHT  = "#e8c27a";
-const BLUE        = "#002145";
-const BLUE_DARK   = "#001830";
-const BLUE_MID    = "#00274d";
+const GOLD        = "var(--gold)";
+const GOLD_LIGHT  = "var(--gold-light)";
+const BLUE        = "var(--surface)";
+const BLUE_DARK   = "var(--bg)";
+const BLUE_MID    = "var(--surface-mid)";
 
 const CHAPTER_OPTIONS = [
   { value: 18, label: "All chapters (1–18)" },
@@ -97,9 +97,9 @@ function buildGraph(flowNodes: Record<string, FlowNode>, maxChapter: number) {
         target: opt.nextId,
         label: simplifyLabel(opt.label),
         type: "smoothstep",
-        style: { stroke: "rgba(198,151,63,0.3)", strokeWidth: 1.5 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: "rgba(198,151,63,0.45)", width: 13, height: 13 },
-        labelStyle: { fill: "rgba(255,255,255,0.5)", fontSize: 10 },
+        style: { stroke: "rgba(var(--gold-rgb),0.3)", strokeWidth: 1.5 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: "rgba(var(--gold-rgb),0.45)", width: 13, height: 13 },
+        labelStyle: { fill: "rgba(var(--text-rgb),0.5)", fontSize: 10 },
         labelBgStyle: { fill: "#001830", fillOpacity: 0.9 },
         labelBgPadding: [4, 3] as [number, number],
         labelBgBorderRadius: 4,
@@ -176,21 +176,21 @@ function OutcomeNode({ data }: NodeProps) {
   const d = data as FlowNodeData;
   if (d.locked) {
     return (
-      <div style={{ width: NODE_W, padding: "10px 14px", borderRadius: 9, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.02)", opacity: 0.38 }}>
+      <div style={{ width: NODE_W, padding: "10px 14px", borderRadius: 9, border: "1px solid rgba(var(--text-rgb),0.1)", background: "rgba(var(--text-rgb),0.02)", opacity: 0.38 }}>
         <Handle type="target" position={Position.Top}    style={HS} />
-        <div style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>
+        <div style={{ fontSize: 8, color: "rgba(var(--text-rgb),0.3)", marginBottom: 4 }}>
           {d.isAdvanced ? "Not in BIOL 300" : d.chapter ? `Ch.${d.chapter} — Not yet covered` : ""}
         </div>
-        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", lineHeight: 1.4 }}>{d.label}</div>
+        <div style={{ fontSize: 11, color: "rgba(var(--text-rgb),0.3)", lineHeight: 1.4 }}>{d.label}</div>
         <Handle type="source" position={Position.Bottom} style={HS} />
       </div>
     );
   }
   return (
-    <div style={{ width: NODE_W, padding: "10px 14px", borderRadius: 9, border: "2px solid rgba(198,151,63,0.58)", background: "rgba(198,151,63,0.12)" }}>
+    <div style={{ width: NODE_W, padding: "10px 14px", borderRadius: 9, border: "2px solid rgba(var(--gold-rgb),0.58)", background: "rgba(var(--gold-rgb),0.12)" }}>
       <Handle type="target" position={Position.Top}    style={HS} />
       {(d.chapter || d.note) && (
-        <div style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.07em", color: "rgba(198,151,63,0.65)", marginBottom: 5 }}>
+        <div style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.07em", color: "rgba(var(--gold-rgb),0.65)", marginBottom: 5 }}>
           {d.chapter ? `Ch.${d.chapter}` : ""}
           {d.chapter && d.note ? " · " : ""}
           {d.note ?? ""}
@@ -219,18 +219,18 @@ function FlowchartVisual({ flowNodes, maxChapter }: { flowNodes: Record<string, 
   );
 
   return (
-    <div style={{ height: 640, borderRadius: 12, overflow: "hidden", border: "1px solid rgba(198,151,63,0.2)" }}>
+    <div style={{ height: 640, borderRadius: 12, overflow: "hidden", border: "1px solid rgba(var(--gold-rgb),0.2)" }}>
       <style>{`
         .react-flow__controls { gap: 2px; }
         .react-flow__controls-button {
           background: #002145 !important;
-          border: 1px solid rgba(198,151,63,0.22) !important;
-          fill: rgba(198,151,63,0.7) !important;
+          border: 1px solid rgba(var(--gold-rgb),0.22) !important;
+          fill: rgba(var(--gold-rgb),0.7) !important;
           box-shadow: none !important;
           border-radius: 7px !important;
         }
         .react-flow__controls-button:hover {
-          background: rgba(198,151,63,0.1) !important;
+          background: rgba(var(--gold-rgb),0.1) !important;
         }
         .react-flow__attribution { display: none; }
         .react-flow__edge-label { font-size: 10px; }
@@ -247,7 +247,7 @@ function FlowchartVisual({ flowNodes, maxChapter }: { flowNodes: Record<string, 
         style={{ background: BLUE_DARK }}
         proOptions={{ hideAttribution: true }}
       >
-        <Background variant={BackgroundVariant.Dots} gap={22} size={1.5} color="rgba(198,151,63,0.1)" />
+        <Background variant={BackgroundVariant.Dots} gap={22} size={1.5} color="rgba(var(--gold-rgb),0.1)" />
         <Controls showInteractive={false} position="bottom-right" />
       </ReactFlow>
     </div>
@@ -261,7 +261,7 @@ function nodeAccent(type: FlowNode["type"]) {
     case "decision":  return { border: "rgba(99,164,255,0.45)",   bg: "rgba(60,120,220,0.08)",  label: "Decision",       labelColor: "#6da3ff" };
     case "check":     return { border: "rgba(180,110,220,0.45)",  bg: "rgba(140,80,200,0.08)",  label: "Check",          labelColor: "#c07ef0" };
     case "transform": return { border: "rgba(255,180,60,0.4)",    bg: "rgba(220,140,30,0.07)",  label: "Transformation", labelColor: "#f0b855" };
-    case "outcome":   return { border: "rgba(198,151,63,0.55)",   bg: "rgba(198,151,63,0.1)",   label: "Test",           labelColor: GOLD_LIGHT };
+    case "outcome":   return { border: "rgba(var(--gold-rgb),0.55)",   bg: "rgba(var(--gold-rgb),0.1)",   label: "Test",           labelColor: GOLD_LIGHT };
   }
 }
 
@@ -271,16 +271,16 @@ function ChapterSelect({ value, onChange }: { value: number; onChange: (v: numbe
   return (
     <div style={{ position: "relative", display: "inline-block", minWidth: 260 }}>
       <button type="button" onClick={() => setOpen(o => !o)}
-        style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 14px", borderRadius: 9, border: `1px solid ${open ? "rgba(198,151,63,0.5)" : "rgba(198,151,63,0.22)"}`, background: BLUE_MID, color: "#fff", fontSize: 12, cursor: "pointer", width: "100%" }}>
-        <span style={{ color: "rgba(255,255,255,0.8)", flex: 1, textAlign: "left" }}>{selected?.label}</span>
+        style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 14px", borderRadius: 9, border: `1px solid ${open ? "rgba(var(--gold-rgb),0.5)" : "rgba(var(--gold-rgb),0.22)"}`, background: BLUE_MID, color: "var(--text)", fontSize: 12, cursor: "pointer", width: "100%" }}>
+        <span style={{ color: "rgba(var(--text-rgb),0.8)", flex: 1, textAlign: "left" }}>{selected?.label}</span>
         <span style={{ color: GOLD, fontSize: 9, flexShrink: 0 }}>{open ? "▲" : "▼"}</span>
       </button>
       {open && (
-        <div style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, background: "#00274d", border: "1px solid rgba(198,151,63,0.25)", borderRadius: 9, overflow: "hidden", zIndex: 100, boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }}>
+        <div style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, background: "#00274d", border: "1px solid rgba(var(--gold-rgb),0.25)", borderRadius: 9, overflow: "hidden", zIndex: 100, boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }}>
           {CHAPTER_OPTIONS.map(o => (
             <button key={o.value} type="button" onClick={() => { onChange(o.value); setOpen(false); }}
-              style={{ width: "100%", textAlign: "left", padding: "8px 14px", fontSize: 12, background: o.value === value ? "rgba(198,151,63,0.12)" : "transparent", color: o.value === value ? GOLD_LIGHT : "rgba(255,255,255,0.65)", border: "none", cursor: "pointer", borderBottom: "1px solid rgba(255,255,255,0.04)" }}
-              onMouseOver={e => { if (o.value !== value) (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.05)"; }}
+              style={{ width: "100%", textAlign: "left", padding: "8px 14px", fontSize: 12, background: o.value === value ? "rgba(var(--gold-rgb),0.12)" : "transparent", color: o.value === value ? GOLD_LIGHT : "rgba(var(--text-rgb),0.65)", border: "none", cursor: "pointer", borderBottom: "1px solid rgba(var(--text-rgb),0.04)" }}
+              onMouseOver={e => { if (o.value !== value) (e.currentTarget as HTMLButtonElement).style.background = "rgba(var(--text-rgb),0.05)"; }}
               onMouseOut={e => { if (o.value !== value) (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}>
               {o.label}
             </button>
@@ -300,10 +300,10 @@ function Breadcrumb({ steps, onJump }: { steps: Step[]; onJump: (i: number) => v
       {steps.map((s, i) => (
         <span key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>
           <button type="button" onClick={() => onJump(i)}
-            style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, padding: "3px 10px", fontSize: 11, color: "rgba(255,255,255,0.45)", cursor: "pointer" }}>
+            style={{ background: "rgba(var(--text-rgb),0.05)", border: "1px solid rgba(var(--text-rgb),0.1)", borderRadius: 6, padding: "3px 10px", fontSize: 11, color: "rgba(var(--text-rgb),0.45)", cursor: "pointer" }}>
             {s.choiceLabel}
           </button>
-          <span style={{ color: "rgba(255,255,255,0.18)", fontSize: 10 }}>›</span>
+          <span style={{ color: "rgba(var(--text-rgb),0.18)", fontSize: 10 }}>›</span>
         </span>
       ))}
     </div>
@@ -338,19 +338,19 @@ function FlowNavigator({ nodes, startId, maxChapter }: { nodes: Record<string, F
     <div>
       <Breadcrumb steps={history} onJump={jumpTo} />
 
-      <div style={{ borderRadius: 14, border: `1.5px solid ${isLocked ? "rgba(255,255,255,0.1)" : accent.border}`, background: isLocked ? "rgba(255,255,255,0.02)" : accent.bg, padding: "22px 24px", marginBottom: 16, transition: "border-color 0.2s, background 0.2s" }}>
+      <div style={{ borderRadius: 14, border: `1.5px solid ${isLocked ? "rgba(var(--text-rgb),0.1)" : accent.border}`, background: isLocked ? "rgba(var(--text-rgb),0.02)" : accent.bg, padding: "22px 24px", marginBottom: 16, transition: "border-color 0.2s, background 0.2s" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-          <span style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: isLocked ? "rgba(255,255,255,0.2)" : accent.labelColor, background: isLocked ? "rgba(255,255,255,0.04)" : `${accent.labelColor}18`, border: `1px solid ${isLocked ? "rgba(255,255,255,0.08)" : `${accent.labelColor}40`}`, borderRadius: 100, padding: "2px 8px" }}>
+          <span style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: isLocked ? "rgba(var(--text-rgb),0.2)" : accent.labelColor, background: isLocked ? "rgba(var(--text-rgb),0.04)" : `${accent.labelColor}18`, border: `1px solid ${isLocked ? "rgba(var(--text-rgb),0.08)" : `${accent.labelColor}40`}`, borderRadius: 100, padding: "2px 8px" }}>
             {isOutcome ? (isLocked ? "Not yet covered" : node.isAdvanced ? "Beyond BIOL 300" : "Test") : accent.label}
           </span>
           {isOutcome && node.chapter && (
-            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.07em", color: isLocked ? "rgba(255,255,255,0.2)" : "rgba(198,151,63,0.6)", background: "rgba(198,151,63,0.08)", border: "1px solid rgba(198,151,63,0.15)", borderRadius: 100, padding: "2px 8px" }}>
+            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.07em", color: isLocked ? "rgba(var(--text-rgb),0.2)" : "rgba(var(--gold-rgb),0.6)", background: "rgba(var(--gold-rgb),0.08)", border: "1px solid rgba(var(--gold-rgb),0.15)", borderRadius: 100, padding: "2px 8px" }}>
               Ch.{node.chapter}
             </span>
           )}
-          {isOutcome && node.note && <span style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", fontStyle: "italic" }}>{node.note}</span>}
+          {isOutcome && node.note && <span style={{ fontSize: 9, color: "rgba(var(--text-rgb),0.25)", fontStyle: "italic" }}>{node.note}</span>}
         </div>
-        <p style={{ fontSize: isOutcome ? 20 : 16, fontWeight: isOutcome ? 700 : 500, color: isLocked ? "rgba(255,255,255,0.25)" : "#fff", lineHeight: 1.5, margin: 0 }}>
+        <p style={{ fontSize: isOutcome ? 20 : 16, fontWeight: isOutcome ? 700 : 500, color: isLocked ? "rgba(var(--text-rgb),0.25)" : "var(--text)", lineHeight: 1.5, margin: 0 }}>
           {node.text}
         </p>
       </div>
@@ -363,11 +363,11 @@ function FlowNavigator({ nodes, startId, maxChapter }: { nodes: Record<string, F
             const nextLocked  = nextOutcome && ((nextNode?.chapter !== undefined && nextNode.chapter > maxChapter) || nextNode?.isAdvanced === true);
             return (
               <button key={opt.nextId} type="button" onClick={() => choose(opt)}
-                style={{ textAlign: "left", padding: "12px 18px", borderRadius: 10, border: `1px solid ${nextLocked ? "rgba(255,255,255,0.08)" : "rgba(198,151,63,0.22)"}`, background: nextLocked ? "rgba(255,255,255,0.02)" : "rgba(255,255,255,0.03)", color: nextLocked ? "rgba(255,255,255,0.25)" : "rgba(255,255,255,0.8)", fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, transition: "border-color 0.15s, background 0.15s" }}
-                onMouseOver={e => { if (!nextLocked) { const el = e.currentTarget; el.style.borderColor = "rgba(198,151,63,0.5)"; el.style.background = "rgba(198,151,63,0.06)"; } }}
-                onMouseOut={e => { const el = e.currentTarget; el.style.borderColor = nextLocked ? "rgba(255,255,255,0.08)" : "rgba(198,151,63,0.22)"; el.style.background = nextLocked ? "rgba(255,255,255,0.02)" : "rgba(255,255,255,0.03)"; }}>
+                style={{ textAlign: "left", padding: "12px 18px", borderRadius: 10, border: `1px solid ${nextLocked ? "rgba(var(--text-rgb),0.08)" : "rgba(var(--gold-rgb),0.22)"}`, background: nextLocked ? "rgba(var(--text-rgb),0.02)" : "rgba(var(--text-rgb),0.03)", color: nextLocked ? "rgba(var(--text-rgb),0.25)" : "rgba(var(--text-rgb),0.8)", fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, transition: "border-color 0.15s, background 0.15s" }}
+                onMouseOver={e => { if (!nextLocked) { const el = e.currentTarget; el.style.borderColor = "rgba(var(--gold-rgb),0.5)"; el.style.background = "rgba(var(--gold-rgb),0.06)"; } }}
+                onMouseOut={e => { const el = e.currentTarget; el.style.borderColor = nextLocked ? "rgba(var(--text-rgb),0.08)" : "rgba(var(--gold-rgb),0.22)"; el.style.background = nextLocked ? "rgba(var(--text-rgb),0.02)" : "rgba(var(--text-rgb),0.03)"; }}>
                 <span>{opt.label}</span>
-                <span style={{ color: nextLocked ? "rgba(255,255,255,0.15)" : GOLD, fontSize: 13, flexShrink: 0 }}>→</span>
+                <span style={{ color: nextLocked ? "rgba(var(--text-rgb),0.15)" : GOLD, fontSize: 13, flexShrink: 0 }}>→</span>
               </button>
             );
           })}
@@ -377,8 +377,8 @@ function FlowNavigator({ nodes, startId, maxChapter }: { nodes: Record<string, F
       {(isOutcome || !node.options?.length) && (
         <div style={{ marginTop: 20 }}>
           <button type="button" onClick={reset}
-            style={{ padding: "9px 22px", borderRadius: 9, border: "1px solid rgba(198,151,63,0.3)", background: "transparent", color: GOLD_LIGHT, fontSize: 13, fontWeight: 600, cursor: "pointer" }}
-            onMouseOver={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(198,151,63,0.08)"; }}
+            style={{ padding: "9px 22px", borderRadius: 9, border: "1px solid rgba(var(--gold-rgb),0.3)", background: "transparent", color: GOLD_LIGHT, fontSize: 13, fontWeight: 600, cursor: "pointer" }}
+            onMouseOver={e => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(var(--gold-rgb),0.08)"; }}
             onMouseOut={e => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}>
             ↺ Start over
           </button>
@@ -413,19 +413,19 @@ export default function FlowchartPage() {
     <>
       <style>{`
         .fchip { transition: background 0.15s, border-color 0.15s, color 0.15s; }
-        .fchip:hover { border-color: rgba(198,151,63,0.5) !important; color: rgba(255,255,255,0.9) !important; }
+        .fchip:hover { border-color: rgba(var(--gold-rgb),0.5) !important; color: rgba(var(--text-rgb),0.9) !important; }
       `}</style>
 
       <div style={{ minHeight: "100vh", background: BLUE_DARK }}>
 
         {/* Nav */}
-        <header style={{ background: BLUE, borderBottom: "1px solid rgba(198,151,63,0.18)", position: "sticky", top: 0, zIndex: 50 }}>
+        <header style={{ background: BLUE, borderBottom: "1px solid rgba(var(--gold-rgb),0.18)", position: "sticky", top: 0, zIndex: 50 }}>
           <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 24px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <div style={{ width: 3, height: 20, borderRadius: 2, background: GOLD, flexShrink: 0 }} />
               <Link href="/" style={{ fontSize: 14, fontWeight: 700, color: GOLD, textDecoration: "none" }}>BIOL 300 Practice Hub</Link>
-              <span style={{ color: "rgba(255,255,255,0.2)", fontSize: 14 }}>/</span>
-              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.55)" }}>What Test?</span>
+              <span style={{ color: "rgba(var(--text-rgb),0.2)", fontSize: 14 }}>/</span>
+              <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>What Test?</span>
             </div>
             <Link href="/practice" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practice →</Link>
           </div>
@@ -435,9 +435,9 @@ export default function FlowchartPage() {
 
           {/* Heading + controls row */}
           <div style={{ marginBottom: 28 }}>
-            <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(198,151,63,0.55)", margin: "0 0 8px" }}>Decision Flowchart</p>
-            <h1 style={{ fontSize: 28, fontWeight: 800, color: "#fff", letterSpacing: "-0.025em", margin: "0 0 8px" }}>What Statistical Test?</h1>
-            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.38)", margin: 0 }}>
+            <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(var(--gold-rgb),0.55)", margin: "0 0 8px" }}>Decision Flowchart</p>
+            <h1 style={{ fontSize: 28, fontWeight: 800, color: "var(--text)", letterSpacing: "-0.025em", margin: "0 0 8px" }}>What Statistical Test?</h1>
+            <p style={{ fontSize: 14, color: "rgba(var(--text-rgb),0.38)", margin: 0 }}>
               Use the visual diagram to see the full decision tree, or switch to step-by-step to navigate it interactively.
             </p>
           </div>
@@ -445,27 +445,27 @@ export default function FlowchartPage() {
           {/* Controls bar */}
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 26, flexWrap: "wrap" }}>
             {/* Mode toggle */}
-            <div style={{ display: "flex", gap: 3, background: "rgba(255,255,255,0.05)", borderRadius: 9, padding: 3 }}>
+            <div style={{ display: "flex", gap: 3, background: "rgba(var(--text-rgb),0.05)", borderRadius: 9, padding: 3 }}>
               {(["visual", "wizard"] as Mode[]).map(m => (
                 <button key={m} type="button" onClick={() => setMode(m)}
-                  style={{ padding: "5px 16px", borderRadius: 6, fontSize: 12, fontWeight: 600, border: "none", cursor: "pointer", background: mode === m ? GOLD : "transparent", color: mode === m ? BLUE : "rgba(255,255,255,0.4)", transition: "background 0.15s, color 0.15s" }}>
+                  style={{ padding: "5px 16px", borderRadius: 6, fontSize: 12, fontWeight: 600, border: "none", cursor: "pointer", background: mode === m ? GOLD : "transparent", color: mode === m ? "#002145" : "rgba(var(--text-rgb),0.4)", transition: "background 0.15s, color 0.15s" }}>
                   {m === "wizard" ? "Step-by-step" : "Visual"}
                 </button>
               ))}
             </div>
 
             {/* Chapter filter */}
-            <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(198,151,63,0.55)", flexShrink: 0 }}>Chapter filter</span>
+            <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(var(--gold-rgb),0.55)", flexShrink: 0 }}>Chapter filter</span>
             <ChapterSelect value={maxCh} onChange={setMaxCh} />
           </div>
 
           {/* Tabs */}
-          <div style={{ display: "flex", gap: 6, marginBottom: 20, borderBottom: "1px solid rgba(255,255,255,0.07)", paddingBottom: 0 }}>
+          <div style={{ display: "flex", gap: 6, marginBottom: 20, borderBottom: "1px solid rgba(var(--text-rgb),0.07)", paddingBottom: 0 }}>
             {TABS.map(t => (
               <button key={t.id} type="button" onClick={() => setTab(t.id)} className="fchip"
-                style={{ padding: "8px 18px 10px", borderRadius: "8px 8px 0 0", fontSize: 13, fontWeight: 600, cursor: "pointer", border: `1px solid ${tab === t.id ? "rgba(198,151,63,0.35)" : "transparent"}`, borderBottom: tab === t.id ? `1px solid ${BLUE_DARK}` : "1px solid transparent", marginBottom: -1, background: tab === t.id ? BLUE_DARK : "transparent", color: tab === t.id ? "#fff" : "rgba(255,255,255,0.38)", transition: "color 0.15s, border-color 0.15s" }}>
+                style={{ padding: "8px 18px 10px", borderRadius: "8px 8px 0 0", fontSize: 13, fontWeight: 600, cursor: "pointer", border: `1px solid ${tab === t.id ? "rgba(var(--gold-rgb),0.35)" : "transparent"}`, borderBottom: tab === t.id ? `1px solid ${BLUE_DARK}` : "1px solid transparent", marginBottom: -1, background: tab === t.id ? BLUE_DARK : "transparent", color: tab === t.id ? "var(--text)" : "rgba(var(--text-rgb),0.38)", transition: "color 0.15s, border-color 0.15s" }}>
                 {t.label}
-                <span style={{ display: "block", fontSize: 9, fontWeight: 400, color: tab === t.id ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.2)", letterSpacing: "0.02em", marginTop: 1 }}>{t.sub}</span>
+                <span style={{ display: "block", fontSize: 9, fontWeight: 400, color: tab === t.id ? "rgba(var(--text-rgb),0.35)" : "rgba(var(--text-rgb),0.2)", letterSpacing: "0.02em", marginTop: 1 }}>{t.sub}</span>
               </button>
             ))}
           </div>
@@ -480,7 +480,7 @@ export default function FlowchartPage() {
             ].map(l => (
               <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 5 }}>
                 <span style={{ width: 8, height: 8, borderRadius: "50%", background: l.color, flexShrink: 0 }} />
-                <span style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>{l.label}</span>
+                <span style={{ fontSize: 10, color: "rgba(var(--text-rgb),0.35)" }}>{l.label}</span>
               </div>
             ))}
           </div>
@@ -493,16 +493,16 @@ export default function FlowchartPage() {
           )}
 
           {mode === "visual" && (
-            <p style={{ marginTop: 10, fontSize: 11, color: "rgba(255,255,255,0.2)", textAlign: "center" }}>
+            <p style={{ marginTop: 10, fontSize: 11, color: "rgba(var(--text-rgb),0.2)", textAlign: "center" }}>
               Scroll to zoom · Click and drag to pan · Dimmed nodes are not yet covered by your chapter filter
             </p>
           )}
 
         </main>
 
-        <footer style={{ borderTop: "1px solid rgba(198,151,63,0.1)", padding: "22px 28px", textAlign: "center" }}>
-          <p style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", margin: 0 }}>
-            Based on Whitlock &amp; Schluter, <em>The Analysis of Biological Data</em>, 3rd ed. · BIOL 300 · UBC
+        <footer style={{ borderTop: "1px solid rgba(var(--gold-rgb),0.1)", padding: "22px 28px", textAlign: "center" }}>
+          <p style={{ fontSize: 11, color: "rgba(var(--text-rgb),0.2)", margin: 0 }}>
+            BIOL 300 · UBC
             &nbsp;·&nbsp;
             <Link href="/" style={{ color: GOLD, textDecoration: "none", opacity: 0.7 }}>Home</Link>
           </p>

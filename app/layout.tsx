@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Lora } from "next/font/google";
 import "./globals.css";
 import "katex/dist/katex.min.css";
+import ThemeToggle from "./lib/ThemeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,8 +34,13 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${lora.variable} h-full antialiased`}
     >
-      <body style={{ minHeight: "100vh", background: "#001830", color: "#fff" }}>
+      <head>
+        {/* Set theme before first paint to avoid flash */}
+        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('theme')||'dark';document.documentElement.dataset.theme=t;}catch(e){}` }} />
+      </head>
+      <body style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
         {children}
+        <ThemeToggle />
       </body>
     </html>
   );
