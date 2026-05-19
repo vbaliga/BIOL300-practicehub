@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.katex { color: inherit; }
+.katex-display { color: inherit; overflow-x: auto; }
