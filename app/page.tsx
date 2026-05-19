@@ -180,7 +180,7 @@ export default function Home() {
                 Start practising
               </Link>
               <a
-                href="https://www.zoology.ubc.ca/~whitlock/bio300/bio300.html"
+                href="https://biologyprogram-2023.sites.olt.ubc.ca/files/2025/08/Syllabus_BIOL300_2025.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-ghost"
