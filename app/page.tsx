@@ -55,7 +55,7 @@ export default function Home() {
           padding: 12px 28px;
           border-radius: 6px;
           background: var(--gold);
-          color: #002145;
+          color: #ffffff;
           font-size: 14px;
           font-weight: 700;
           text-decoration: none;
