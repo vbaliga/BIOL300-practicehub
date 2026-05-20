@@ -87,10 +87,10 @@ function TableFromText({ text }: { text: string }) {
           <tr key={ri} style={{ borderBottom: `1px solid ${ri === 0 ? "rgba(var(--gold-rgb),0.2)" : "rgba(var(--text-rgb),0.05)"}`, background: ri === 0 ? "rgba(var(--gold-rgb),0.06)" : "transparent" }}>
             {cells.map((cell, ci) => ri === 0 ? (
               <th key={ci} style={{ padding: "8px 12px", textAlign: "left", fontWeight: 600, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.05em", color: GOLD_LIGHT, whiteSpace: "nowrap" }}
-                dangerouslySetInnerHTML={{ __html: esc(cell) }} />
+                dangerouslySetInnerHTML={{ __html: renderInlineMath(cell) }} />
             ) : (
-              <td key={ci} style={{ padding: "8px 12px", fontFamily: "ui-monospace,monospace", fontSize: 12, color: "rgba(var(--text-rgb),0.75)", whiteSpace: "nowrap" }}
-                dangerouslySetInnerHTML={{ __html: esc(cell) }} />
+              <td key={ci} style={{ padding: "8px 12px", fontSize: 13, color: "rgba(var(--text-rgb),0.75)", whiteSpace: "nowrap" }}
+                dangerouslySetInnerHTML={{ __html: renderInlineMath(cell) }} />
             ))}
           </tr>
         ))}

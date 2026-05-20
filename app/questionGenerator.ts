@@ -1317,7 +1317,7 @@ function generateRegression(rng: () => number): GeneratedQuestion {
   const ci95lo = round(b - tCrit * SE_b, 4);
   const ci95hi = round(b + tCrit * SE_b, 4);
 
-  const summaryTable = `| Statistic | Value |\n|---|---|\n| n | ${n} |\n| x̄ | ${round(xBar, 2)} |\n| ȳ | ${round(yBar, 2)} |\n| SSx | ${round(SSx, 2)} |\n| SSy | ${round(SSy, 2)} |\n| SPxy | ${round(SPxy, 2)} |`;
+  const summaryTable = `| Statistic | Value |\n|---|---|\n| $n$ | ${n} |\n| $\\bar{x}$ | ${round(xBar, 2)} |\n| $\\bar{y}$ | ${round(yBar, 2)} |\n| $SS_x$ | ${round(SSx, 2)} |\n| $SS_y$ | ${round(SSy, 2)} |\n| $SP_{xy}$ | ${round(SPxy, 2)} |`;
 
   const qText = sc.context.replace("{n}", String(n)) +
     " The following summary statistics are provided:\n\n" +
