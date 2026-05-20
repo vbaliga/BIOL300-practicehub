@@ -84,23 +84,25 @@ function buildGraph(flowNodes: Record<string, FlowNode>, maxChapter: number) {
     const locked =
       n.type === "outcome" &&
       ((n.chapter !== undefined && n.chapter > maxChapter) || n.isAdvanced === true);
+    const optionCount = n.options?.length ?? 0;
     rfNodes.push({
       id: n.id,
       type: n.type,
       position: { x: 0, y: 0 },
-      data: { label: n.text, chapter: n.chapter, isAdvanced: n.isAdvanced, note: n.note, locked },
+      data: { label: n.text, chapter: n.chapter, isAdvanced: n.isAdvanced, note: n.note, locked, optionCount },
     });
-    (n.options ?? []).forEach(opt => {
+    (n.options ?? []).forEach((opt, idx) => {
       rfEdges.push({
         id: `e-${n.id}-${opt.nextId}`,
         source: n.id,
         target: opt.nextId,
+        sourceHandle: optionCount === 2 ? (idx === 0 ? "left" : "right") : undefined,
         label: simplifyLabel(opt.label),
         type: "smoothstep",
-        style: { stroke: "rgba(var(--gold-rgb),0.3)", strokeWidth: 1.5 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: "rgba(var(--gold-rgb),0.45)", width: 13, height: 13 },
-        labelStyle: { fill: "rgba(var(--text-rgb),0.5)", fontSize: 10 },
-        labelBgStyle: { fill: "#001830", fillOpacity: 0.9 },
+        style: { stroke: "rgba(var(--gold-rgb),0.35)", strokeWidth: 1.5 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: "rgba(var(--gold-rgb),0.5)", width: 13, height: 13 },
+        labelStyle: { fill: "var(--text)", fontSize: 10, opacity: 0.6 },
+        labelBgStyle: { fill: "var(--surface)", fillOpacity: 0.92 },
         labelBgPadding: [4, 3] as [number, number],
         labelBgBorderRadius: 4,
       });
@@ -132,18 +134,31 @@ interface FlowNodeData extends Record<string, unknown> {
   isAdvanced?: boolean;
   note?: string;
   locked: boolean;
+  optionCount?: number;
 }
 
 const HS: React.CSSProperties = { opacity: 0, width: 1, height: 1, minWidth: 0, minHeight: 0 };
+const HS_L: React.CSSProperties = { ...HS, left: "28%" };
+const HS_R: React.CSSProperties = { ...HS, left: "72%" };
+
+function SourceHandles({ optionCount }: { optionCount: number }) {
+  if (optionCount === 2) return (
+    <>
+      <Handle type="source" position={Position.Bottom} id="left"  style={HS_L} />
+      <Handle type="source" position={Position.Bottom} id="right" style={HS_R} />
+    </>
+  );
+  return <Handle type="source" position={Position.Bottom} style={HS} />;
+}
 
 function DecisionNode({ data }: NodeProps) {
   const d = data as FlowNodeData;
   return (
-    <div style={{ width: NODE_W, padding: "10px 14px", borderRadius: 9, border: "1.5px solid rgba(99,164,255,0.42)", background: "rgba(50,110,210,0.12)" }}>
+    <div style={{ width: NODE_W, padding: "10px 14px", borderRadius: 9, border: "1.5px solid var(--node-decision-border)", background: "var(--node-decision-bg)" }}>
       <Handle type="target" position={Position.Top}    style={HS} />
-      <div style={{ fontSize: 8, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(109,163,255,0.65)", marginBottom: 5 }}>Decision</div>
-      <div style={{ fontSize: 11, color: "#8ec2ff", lineHeight: 1.45 }}>{d.label}</div>
-      <Handle type="source" position={Position.Bottom} style={HS} />
+      <div style={{ fontSize: 8, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--node-decision-label)", marginBottom: 5 }}>Decision</div>
+      <div style={{ fontSize: 11, color: "var(--node-decision-text)", lineHeight: 1.45 }}>{d.label}</div>
+      <SourceHandles optionCount={d.optionCount ?? 0} />
     </div>
   );
 }
@@ -151,11 +166,11 @@ function DecisionNode({ data }: NodeProps) {
 function CheckNode({ data }: NodeProps) {
   const d = data as FlowNodeData;
   return (
-    <div style={{ width: NODE_W, padding: "10px 14px", borderRadius: 9, border: "1.5px solid rgba(180,110,220,0.42)", background: "rgba(130,75,195,0.1)" }}>
+    <div style={{ width: NODE_W, padding: "10px 14px", borderRadius: 9, border: "1.5px solid var(--node-check-border)", background: "var(--node-check-bg)" }}>
       <Handle type="target" position={Position.Top}    style={HS} />
-      <div style={{ fontSize: 8, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(192,126,240,0.65)", marginBottom: 5 }}>Check</div>
-      <div style={{ fontSize: 11, color: "#c07ef0", lineHeight: 1.45 }}>{d.label}</div>
-      <Handle type="source" position={Position.Bottom} style={HS} />
+      <div style={{ fontSize: 8, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--node-check-label)", marginBottom: 5 }}>Check</div>
+      <div style={{ fontSize: 11, color: "var(--node-check-text)", lineHeight: 1.45 }}>{d.label}</div>
+      <SourceHandles optionCount={d.optionCount ?? 0} />
     </div>
   );
 }
@@ -163,11 +178,11 @@ function CheckNode({ data }: NodeProps) {
 function TransformNode({ data }: NodeProps) {
   const d = data as FlowNodeData;
   return (
-    <div style={{ width: NODE_W, padding: "10px 14px", borderRadius: 9, border: "1.5px solid rgba(255,185,60,0.42)", background: "rgba(215,140,25,0.09)" }}>
+    <div style={{ width: NODE_W, padding: "10px 14px", borderRadius: 9, border: "1.5px solid var(--node-transform-border)", background: "var(--node-transform-bg)" }}>
       <Handle type="target" position={Position.Top}    style={HS} />
-      <div style={{ fontSize: 8, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(240,184,85,0.65)", marginBottom: 5 }}>Transformation</div>
-      <div style={{ fontSize: 11, color: "#f0b855", lineHeight: 1.45 }}>{d.label}</div>
-      <Handle type="source" position={Position.Bottom} style={HS} />
+      <div style={{ fontSize: 8, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--node-transform-label)", marginBottom: 5 }}>Transformation</div>
+      <div style={{ fontSize: 11, color: "var(--node-transform-text)", lineHeight: 1.45 }}>{d.label}</div>
+      <SourceHandles optionCount={d.optionCount ?? 0} />
     </div>
   );
 }
@@ -223,14 +238,14 @@ function FlowchartVisual({ flowNodes, maxChapter }: { flowNodes: Record<string, 
       <style>{`
         .react-flow__controls { gap: 2px; }
         .react-flow__controls-button {
-          background: #002145 !important;
-          border: 1px solid rgba(var(--gold-rgb),0.22) !important;
-          fill: rgba(var(--gold-rgb),0.7) !important;
-          box-shadow: none !important;
+          background: var(--surface) !important;
+          border: 1px solid rgba(var(--text-rgb),0.15) !important;
+          fill: var(--gold) !important;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important;
           border-radius: 7px !important;
         }
         .react-flow__controls-button:hover {
-          background: rgba(var(--gold-rgb),0.1) !important;
+          background: rgba(var(--gold-rgb),0.08) !important;
         }
         .react-flow__attribution { display: none; }
         .react-flow__edge-label { font-size: 10px; }
@@ -244,10 +259,10 @@ function FlowchartVisual({ flowNodes, maxChapter }: { flowNodes: Record<string, 
         elementsSelectable={false}
         fitView
         fitViewOptions={{ padding: 0.12 }}
-        style={{ background: BLUE_DARK }}
+        style={{ background: "var(--bg)" }}
         proOptions={{ hideAttribution: true }}
       >
-        <Background variant={BackgroundVariant.Dots} gap={22} size={1.5} color="rgba(var(--gold-rgb),0.1)" />
+        <Background variant={BackgroundVariant.Dots} gap={22} size={1.5} color="rgba(var(--text-rgb),0.06)" />
         <Controls showInteractive={false} position="bottom-right" />
       </ReactFlow>
     </div>
@@ -258,10 +273,10 @@ function FlowchartVisual({ flowNodes, maxChapter }: { flowNodes: Record<string, 
 
 function nodeAccent(type: FlowNode["type"]) {
   switch (type) {
-    case "decision":  return { border: "rgba(99,164,255,0.45)",   bg: "rgba(60,120,220,0.08)",  label: "Decision",       labelColor: "#6da3ff" };
-    case "check":     return { border: "rgba(180,110,220,0.45)",  bg: "rgba(140,80,200,0.08)",  label: "Check",          labelColor: "#c07ef0" };
-    case "transform": return { border: "rgba(255,180,60,0.4)",    bg: "rgba(220,140,30,0.07)",  label: "Transformation", labelColor: "#f0b855" };
-    case "outcome":   return { border: "rgba(var(--gold-rgb),0.55)",   bg: "rgba(var(--gold-rgb),0.1)",   label: "Test",           labelColor: GOLD_LIGHT };
+    case "decision":  return { border: "var(--node-decision-border)",  bg: "var(--node-decision-bg)",  label: "Decision",       labelColor: "var(--node-decision-text)",  labelBg: "var(--node-decision-bg)",  labelBorder: "var(--node-decision-border)" };
+    case "check":     return { border: "var(--node-check-border)",     bg: "var(--node-check-bg)",     label: "Check",          labelColor: "var(--node-check-text)",     labelBg: "var(--node-check-bg)",     labelBorder: "var(--node-check-border)" };
+    case "transform": return { border: "var(--node-transform-border)", bg: "var(--node-transform-bg)", label: "Transformation", labelColor: "var(--node-transform-text)", labelBg: "var(--node-transform-bg)", labelBorder: "var(--node-transform-border)" };
+    case "outcome":   return { border: "rgba(var(--gold-rgb),0.55)",   bg: "rgba(var(--gold-rgb),0.1)", label: "Test",           labelColor: GOLD_LIGHT,                  labelBg: "rgba(var(--gold-rgb),0.1)", labelBorder: "rgba(var(--gold-rgb),0.4)" };
   }
 }
 
@@ -271,12 +286,12 @@ function ChapterSelect({ value, onChange }: { value: number; onChange: (v: numbe
   return (
     <div style={{ position: "relative", display: "inline-block", minWidth: 260 }}>
       <button type="button" onClick={() => setOpen(o => !o)}
-        style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 14px", borderRadius: 9, border: `1px solid ${open ? "rgba(var(--gold-rgb),0.5)" : "rgba(var(--gold-rgb),0.22)"}`, background: BLUE_MID, color: "var(--text)", fontSize: 12, cursor: "pointer", width: "100%" }}>
+        style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 14px", borderRadius: 9, border: `1px solid ${open ? "rgba(var(--gold-rgb),0.5)" : "rgba(var(--text-rgb),0.12)"}`, background: "var(--surface)", color: "var(--text)", fontSize: 12, cursor: "pointer", width: "100%" }}>
         <span style={{ color: "rgba(var(--text-rgb),0.8)", flex: 1, textAlign: "left" }}>{selected?.label}</span>
         <span style={{ color: GOLD, fontSize: 9, flexShrink: 0 }}>{open ? "▲" : "▼"}</span>
       </button>
       {open && (
-        <div style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, background: "#00274d", border: "1px solid rgba(var(--gold-rgb),0.25)", borderRadius: 9, overflow: "hidden", zIndex: 100, boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }}>
+        <div style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, background: "var(--surface)", border: "1px solid rgba(var(--text-rgb),0.12)", borderRadius: 9, overflow: "hidden", zIndex: 100, boxShadow: "0 8px 32px rgba(0,0,0,0.15)" }}>
           {CHAPTER_OPTIONS.map(o => (
             <button key={o.value} type="button" onClick={() => { onChange(o.value); setOpen(false); }}
               style={{ width: "100%", textAlign: "left", padding: "8px 14px", fontSize: 12, background: o.value === value ? "rgba(var(--gold-rgb),0.12)" : "transparent", color: o.value === value ? GOLD_LIGHT : "rgba(var(--text-rgb),0.65)", border: "none", cursor: "pointer", borderBottom: "1px solid rgba(var(--text-rgb),0.04)" }}
@@ -340,7 +355,7 @@ function FlowNavigator({ nodes, startId, maxChapter }: { nodes: Record<string, F
 
       <div style={{ borderRadius: 14, border: `1.5px solid ${isLocked ? "rgba(var(--text-rgb),0.1)" : accent.border}`, background: isLocked ? "rgba(var(--text-rgb),0.02)" : accent.bg, padding: "22px 24px", marginBottom: 16, transition: "border-color 0.2s, background 0.2s" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-          <span style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: isLocked ? "rgba(var(--text-rgb),0.2)" : accent.labelColor, background: isLocked ? "rgba(var(--text-rgb),0.04)" : `${accent.labelColor}18`, border: `1px solid ${isLocked ? "rgba(var(--text-rgb),0.08)" : `${accent.labelColor}40`}`, borderRadius: 100, padding: "2px 8px" }}>
+          <span style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: isLocked ? "rgba(var(--text-rgb),0.2)" : accent.labelColor, background: isLocked ? "rgba(var(--text-rgb),0.04)" : accent.labelBg, border: `1px solid ${isLocked ? "rgba(var(--text-rgb),0.08)" : accent.labelBorder}`, borderRadius: 100, padding: "2px 8px" }}>
             {isOutcome ? (isLocked ? "Not yet covered" : node.isAdvanced ? "Beyond BIOL 300" : "Test") : accent.label}
           </span>
           {isOutcome && node.chapter && (
@@ -473,10 +488,10 @@ export default function FlowchartPage() {
           {/* Legend */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginBottom: 20 }}>
             {[
-              { color: "#6da3ff",  label: "Decision" },
-              { color: "#c07ef0",  label: "Check / assumption" },
-              { color: "#f0b855",  label: "Transformation" },
-              { color: GOLD_LIGHT, label: "Outcome (test)" },
+              { color: "var(--node-decision-text)",  label: "Decision" },
+              { color: "var(--node-check-text)",     label: "Check / assumption" },
+              { color: "var(--node-transform-text)", label: "Transformation" },
+              { color: "var(--gold)",                label: "Outcome (test)" },
             ].map(l => (
               <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 5 }}>
                 <span style={{ width: 8, height: 8, borderRadius: "50%", background: l.color, flexShrink: 0 }} />
