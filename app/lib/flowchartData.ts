@@ -261,8 +261,17 @@ export const TWO_VAR_NODES: Record<string, FlowNode> = {
     type: 'transform',
     text: 'Try a transformation (e.g. log, square root). Did it achieve approximate normality?',
     options: [
-      { label: 'Yes — data are now approximately normal', nextId: 'two-cat-means-2-var-equal' },
+      { label: 'Yes — data are now approximately normal', nextId: 'two-cat-means-2-var-equal-b' },
       { label: "No — transformation doesn't help", nextId: 'outcome-mann-whitney' },
+    ],
+  },
+  'two-cat-means-2-var-equal-b': {
+    id: 'two-cat-means-2-var-equal-b',
+    type: 'check',
+    text: 'Are the variances approximately equal between groups?',
+    options: [
+      { label: 'Yes', nextId: 'outcome-two-sample-t' },
+      { label: 'No', nextId: 'outcome-welch-t' },
     ],
   },
   'outcome-mann-whitney': {
