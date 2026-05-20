@@ -1466,6 +1466,145 @@ function generateCIMean(rng: () => number): GeneratedQuestion {
   };
 }
 
+// ─── FISHER'S EXACT TEST GENERATOR ───────────────────────────────────────────
+
+function generateFishersExact(rng: () => number): GeneratedQuestion {
+  const scenarios = [
+    {
+      context: "A wildlife biologist radio-tracked wolves reintroduced to two separate national parks and recorded whether each individual survived its first winter.",
+      rowVar: "Park", rows: ["Park A", "Park B"],
+      colVar: "Survival", cols: ["Survived", "Died"],
+      null0: "Survival is independent of park",
+      altH: "Survival is not independent of park",
+    },
+    {
+      context: "A conservation geneticist tested whether a rare colour morph in a small island population of lizards is associated with microhabitat type.",
+      rowVar: "Microhabitat", rows: ["Rocky outcrops", "Sandy flats"],
+      colVar: "Colour morph", cols: ["Rare morph", "Common morph"],
+      null0: "Colour morph frequency is independent of microhabitat",
+      altH: "Colour morph frequency is not independent of microhabitat",
+    },
+    {
+      context: "A field ecologist trapped small mammals at two sites and recorded whether each individual carried a specific tick-borne pathogen.",
+      rowVar: "Site", rows: ["Riparian site", "Upland site"],
+      colVar: "Pathogen", cols: ["Positive", "Negative"],
+      null0: "Pathogen prevalence is independent of site",
+      altH: "Pathogen prevalence is not independent of site",
+    },
+    {
+      context: "Researchers conducting a small pilot study investigated whether fish exposure to a novel pollutant during early development is associated with the appearance of fin abnormalities.",
+      rowVar: "Treatment", rows: ["Exposed", "Control"],
+      colVar: "Fin abnormality", cols: ["Present", "Absent"],
+      null0: "Fin abnormality rate is independent of treatment",
+      altH: "Fin abnormality rate differs between treatment and control",
+    },
+    {
+      context: "A plant ecologist recorded seed germination success for two rare species collected from a single small remnant population.",
+      rowVar: "Species", rows: ["Species A", "Species B"],
+      colVar: "Germination", cols: ["Germinated", "Failed"],
+      null0: "Germination success is independent of species",
+      altH: "Germination success differs between species",
+    },
+    {
+      context: "In a small captive breeding programme, researchers recorded whether juvenile crocodilians of two clutches hatched with skeletal deformities.",
+      rowVar: "Clutch", rows: ["Clutch 1", "Clutch 2"],
+      colVar: "Deformity", cols: ["Deformed", "Normal"],
+      null0: "Deformity rate is independent of clutch",
+      altH: "Deformity rate is not independent of clutch",
+    },
+    {
+      context: "A marine ecologist conducted a pilot survey and recorded whether individual sea urchins from two tidal pools showed signs of wasting disease.",
+      rowVar: "Tidal pool", rows: ["Pool A", "Pool B"],
+      colVar: "Disease sign", cols: ["Present", "Absent"],
+      null0: "Disease prevalence is independent of tidal pool",
+      altH: "Disease prevalence differs between tidal pools",
+    },
+  ];
+
+  const sc = pick(rng, scenarios);
+
+  // Generate a small 2×2 table that violates chi-square assumptions.
+  // Strategy: one row has a very small total so ≥1 expected cell < 1 or
+  // multiple cells < 5 (i.e. more than 20% of 4 cells).
+  // Row totals: one large (15–30), one small (2–5).
+  const bigRow   = randInt(rng, 15, 30);
+  const smallRow = randInt(rng, 2, 5);
+  const grandTotal = bigRow + smallRow;
+
+  // Split big row roughly 60/40 to 80/20
+  const splitFrac = 0.3 + rng() * 0.4; // 30–70% in col 0
+  const a = Math.max(1, Math.round(bigRow * splitFrac));
+  const b = bigRow - a;
+
+  // Small row: put almost all in one column to push an expected count below 1
+  const useAllInOne = rng() < 0.5;
+  const c = useAllInOne ? smallRow : Math.max(0, smallRow - 1);
+  const d = smallRow - c;
+
+  const observed = [[a, b], [c, d]];
+  const rowTotals = [bigRow, smallRow];
+  const colTotals = [a + c, b + d];
+
+  // Expected counts: E_ij = rowTotal_i * colTotal_j / grandTotal
+  const exp: number[][] = observed.map((row, i) =>
+    row.map((_, j) => (rowTotals[i] * colTotals[j]) / grandTotal)
+  );
+
+  // Count cells with E < 5
+  const below5 = exp.flat().filter(e => e < 5).length;
+  const below1 = exp.flat().filter(e => e < 1).length;
+  const pctBelow5 = (below5 / 4) * 100;
+
+  const rows = sc.rows;
+  const cols = sc.cols;
+
+  const obsTable =
+    `| | ${cols[0]} | ${cols[1]} | Total |\n` +
+    `|---|---|---|---|\n` +
+    `| ${rows[0]} | ${a} | ${b} | ${bigRow} |\n` +
+    `| ${rows[1]} | ${c} | ${d} | ${smallRow} |\n` +
+    `| **Total** | **${colTotals[0]}** | **${colTotals[1]}** | **${grandTotal}** |`;
+
+  const expTable =
+    `| | ${cols[0]} | ${cols[1]} |\n` +
+    `|---|---|---|\n` +
+    `| ${rows[0]} | $E = \\frac{${bigRow} \\times ${colTotals[0]}}{${grandTotal}} = ${fmt(exp[0][0], 2)}$ | $E = \\frac{${bigRow} \\times ${colTotals[1]}}{${grandTotal}} = ${fmt(exp[0][1], 2)}$ |\n` +
+    `| ${rows[1]} | $E = \\frac{${smallRow} \\times ${colTotals[0]}}{${grandTotal}} = ${fmt(exp[1][0], 2)}$ | $E = \\frac{${smallRow} \\times ${colTotals[1]}}{${grandTotal}} = ${fmt(exp[1][1], 2)}$ |`;
+
+  const violationLines: string[] = [];
+  if (below1 > 0) violationLines.push(`${below1} cell${below1 > 1 ? "s have" : " has"} an expected count below 1 — this alone is sufficient to require Fisher's Exact Test.`);
+  violationLines.push(`${below5} of 4 cells (${pctBelow5.toFixed(0)}%) have expected counts below 5, which exceeds the 20% threshold.`);
+
+  const qText =
+    `${sc.context} The observed counts are shown below. ` +
+    `Calculate the expected cell counts and determine whether a chi-square contingency test or Fisher's Exact Test is more appropriate. ` +
+    `Justify your choice using the relevant assumptions. Use α = 0.05.\n\n` + obsTable;
+
+  const blocks: AnswerBlock[] = [
+    { kind: "heading", text: "Step 1 — State hypotheses" },
+    { kind: "text",    text: `$H_0$: ${sc.null0}\n$H_a$: ${sc.altH}` },
+    { kind: "heading", text: "Step 2 — Calculate expected counts" },
+    { kind: "text",    text: `$E_{ij} = \\dfrac{\\text{row total}_i \\times \\text{col total}_j}{\\text{grand total}}$\n\n` + expTable },
+    { kind: "heading", text: "Step 3 — Check chi-square assumptions" },
+    { kind: "text",    text: "The chi-square contingency test requires:\n- No more than 20% of expected cells < 5\n- No expected cell < 1\n\n" + violationLines.join(" ") },
+    { kind: "heading", text: "Step 4 — Choose the correct test" },
+    { kind: "text",    text: "Because the expected count assumptions are violated, the **chi-square approximation is not valid**. Use **Fisher's Exact Test** instead." },
+    { kind: "heading", text: "Test: Fisher's Exact Test" },
+    { kind: "text",    text: "Fisher's Exact Test computes an exact P-value using the hypergeometric distribution — no large-sample approximation is needed. It is the standard choice for 2×2 tables with small expected counts." },
+    { kind: "text",    text: "Assumptions: (1) 2×2 contingency table, (2) independent observations, (3) row and/or column totals treated as fixed." },
+    { kind: "conclusion", text: "Fisher's Exact Test is appropriate here. The small sample sizes produce expected counts that violate the chi-square approximation. BIOL 300 students are expected to identify this test and justify its selection; calculation is not required." },
+  ];
+
+  return {
+    id: `fishers-exact-${Date.now()}`,
+    testType: "fishers-exact",
+    category: "identify-only",
+    chapter: 9,
+    questionText: qText,
+    answerBlocks: blocks,
+  };
+}
+
 // ─── IDENTIFY-ONLY GENERATORS ─────────────────────────────────────────────────
 
 export function generateIdentifyOnly(testType: TestType, rng: () => number): GeneratedQuestion {
@@ -1737,6 +1876,7 @@ export function generateQuestion(filter: QuestionFilter, seed?: number): Generat
     case "correlation":            return generateCorrelation(rng);
     case "regression":             return generateRegression(rng);
     case "ci-mean":                return generateCIMean(rng);
+    case "fishers-exact":          return generateFishersExact(rng);
     default:                       return generateIdentifyOnly(chosen, rng);
   }
 }
