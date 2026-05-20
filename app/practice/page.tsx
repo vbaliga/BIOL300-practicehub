@@ -721,16 +721,16 @@ export default function PracticePage() {
                   <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(var(--text-rgb),0.25)", marginBottom: 4 }}>Worked Answer</div>
                   {question.answerBlocks.map((b, i) => <Block key={i} b={b} />)}
                   <div style={{ marginTop: 24, paddingTop: 14, borderTop: "1px solid rgba(var(--text-rgb),0.06)" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, color: "rgba(var(--text-rgb),0.2)" }}>
-                      <span>Seed {seed}</span>
-                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        <span>α = 0.05</span>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontSize: 10, color: "rgba(var(--text-rgb),0.2)" }}>Seed {seed}</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ fontSize: 10, color: "rgba(var(--text-rgb),0.2)" }}>α = 0.05</span>
                         {reportStatus === "sent" ? (
-                          <span style={{ fontSize: 10, color: "rgba(134,197,120,0.8)" }}>✓ Reported</span>
+                          <span style={{ fontSize: 11, color: "rgba(134,197,120,0.9)", fontWeight: 600 }}>✓ Reported</span>
                         ) : (
                           <button
                             onClick={() => setReportOpen(o => !o)}
-                            style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.35)", background: "none", border: "none", cursor: "pointer", padding: 0, textDecoration: "underline" }}
+                            style={{ fontSize: 11, fontWeight: 600, color: "var(--gold)", background: "rgba(var(--gold-rgb),0.08)", border: "1px solid rgba(var(--gold-rgb),0.3)", borderRadius: 20, cursor: "pointer", padding: "4px 12px", lineHeight: 1.4 }}
                           >
                             Report an issue
                           </button>
