@@ -104,6 +104,23 @@ export default function AboutPage() {
           </ul>
         </section>
 
+        {/* AI disclaimer */}
+        <section style={{ marginBottom: 20, padding: "22px 24px", borderRadius: 14, border: "1px solid rgba(var(--text-rgb),0.09)", background: "rgba(var(--text-rgb),0.02)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
+            <div style={{ width: 3, height: 16, borderRadius: 2, background: GOLD, flexShrink: 0 }} />
+            <h2 style={{ fontSize: 13, fontWeight: 700, color: "rgba(var(--text-rgb),0.7)", margin: 0 }}>AI-generated content</h2>
+          </div>
+          <p style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.5)", lineHeight: 1.75, margin: "0 0 10px" }}>
+            The practice questions on this site — including biological scenarios, organism names, variable descriptions, and numerical values — were generated with the help of <strong style={{ color: "rgba(var(--text-rgb),0.7)" }}>Claude Sonnet 4.6</strong> (Anthropic). These scenarios are <strong style={{ color: "rgba(var(--text-rgb),0.7)" }}>entirely fictional</strong> and should not be treated as real research findings or cited as sources.
+          </p>
+          <p style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.5)", lineHeight: 1.75, margin: "0 0 10px" }}>
+            The statistical methodology — test selection logic, worked solutions, and formula content — has been reviewed for correctness by the course instructor. That said, AI-generated content can occasionally contain errors or quirks. If you notice something that seems wrong or unclear, please use the <strong style={{ color: "rgba(var(--text-rgb),0.7)" }}>Report an issue</strong> button at the bottom of any worked answer to flag it.
+          </p>
+          <p style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.5)", lineHeight: 1.75, margin: 0 }}>
+            In contrast, any data from actual published studies (as seen in the course textbook and lecture slides) would be properly cited. No real study data appear on this site without attribution.
+          </p>
+        </section>
+
         {/* Source code (placeholder) */}
         <section style={{ padding: "16px 20px", borderRadius: 12, border: "1px solid rgba(var(--text-rgb),0.06)", background: "rgba(var(--text-rgb),0.02)" }}>
           <p style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.3)", margin: 0, lineHeight: 1.6 }}>

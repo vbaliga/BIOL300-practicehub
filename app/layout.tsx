@@ -36,7 +36,7 @@ export default function RootLayout({
     >
       <head>
         {/* Set theme before first paint to avoid flash */}
-        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('theme')||'dark';document.documentElement.dataset.theme=t;}catch(e){}` }} />
+        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('theme')||'light';document.documentElement.dataset.theme=t;}catch(e){}` }} />
       </head>
       <body style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--text)" }}>
         {children}

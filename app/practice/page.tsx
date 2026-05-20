@@ -412,6 +412,9 @@ export default function PracticePage() {
   const [showTestConfig, setShowTestConfig] = useState(false);
   const [mcqOptions, setMcqOptions] = useState<TestType[]>([]);
   const [mcqChoice, setMcqChoice] = useState<TestType | null>(null);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportText, setReportText] = useState("");
+  const [reportStatus, setReportStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   const availableCalculable  = CALCULABLE_TYPES.filter(t => TEST_CHAPTER[t] <= maxChapter);
   const availableIdentifyOnly = IDENTIFY_ONLY_TYPES.filter(t => TEST_CHAPTER[t] <= maxChapter);
@@ -455,6 +458,9 @@ export default function PracticePage() {
     setQuestion(q);
     setShowAnswer(false);
     setMcqChoice(null);
+    setReportOpen(false);
+    setReportText("");
+    setReportStatus("idle");
     const fixedDistractors = MCQ_DISTRACTORS[chosen];
     const distractors = fixedDistractors
       ? fixedDistractors
@@ -616,7 +622,7 @@ export default function PracticePage() {
             {/* Generate */}
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <button onClick={generate} className="action-btn"
-                style={{ background: GOLD, color: "#001830", border: "none", borderRadius: 9, padding: "11px 26px", fontSize: 14, fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 20px rgba(var(--gold-rgb),0.3)", letterSpacing: "0.01em" }}>
+                style={{ background: GOLD, color: "#ffffff", border: "none", borderRadius: 9, padding: "11px 26px", fontSize: 14, fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 20px rgba(var(--gold-rgb),0.3)", letterSpacing: "0.01em" }}>
                 Generate Question
               </button>
             </div>
@@ -714,9 +720,63 @@ export default function PracticePage() {
                 <div style={card}>
                   <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(var(--text-rgb),0.25)", marginBottom: 4 }}>Worked Answer</div>
                   {question.answerBlocks.map((b, i) => <Block key={i} b={b} />)}
-                  <div style={{ marginTop: 24, paddingTop: 14, borderTop: "1px solid rgba(var(--text-rgb),0.06)", display: "flex", justifyContent: "space-between", fontSize: 10, color: "rgba(var(--text-rgb),0.2)" }}>
-                    <span>Seed {seed}</span>
-                    <span>α = 0.05</span>
+                  <div style={{ marginTop: 24, paddingTop: 14, borderTop: "1px solid rgba(var(--text-rgb),0.06)" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, color: "rgba(var(--text-rgb),0.2)" }}>
+                      <span>Seed {seed}</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <span>α = 0.05</span>
+                        {reportStatus === "sent" ? (
+                          <span style={{ fontSize: 10, color: "rgba(134,197,120,0.8)" }}>✓ Reported</span>
+                        ) : (
+                          <button
+                            onClick={() => setReportOpen(o => !o)}
+                            style={{ fontSize: 10, color: "rgba(var(--text-rgb),0.3)", background: "none", border: "none", cursor: "pointer", padding: 0, textDecoration: "underline" }}
+                          >
+                            Report an issue
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {reportOpen && reportStatus !== "sent" && (
+                      <div style={{ marginTop: 12, padding: "14px 16px", borderRadius: 10, border: "1px solid rgba(var(--text-rgb),0.1)", background: "rgba(var(--text-rgb),0.03)" }}>
+                        <div style={{ fontSize: 11, fontWeight: 600, color: "rgba(var(--text-rgb),0.5)", marginBottom: 8 }}>
+                          Describe the issue <span style={{ fontWeight: 400, opacity: 0.6 }}>(seed {seed} will be included automatically)</span>
+                        </div>
+                        <textarea
+                          value={reportText}
+                          onChange={e => setReportText(e.target.value)}
+                          placeholder="e.g. The expected values in the table don't match the null hypothesis stated above."
+                          rows={3}
+                          style={{ width: "100%", boxSizing: "border-box", padding: "8px 10px", borderRadius: 7, border: "1px solid rgba(var(--text-rgb),0.15)", background: "var(--surface)", color: "var(--text)", fontSize: 12, resize: "vertical", outline: "none", fontFamily: "inherit" }}
+                        />
+                        <div style={{ display: "flex", gap: 8, marginTop: 8, alignItems: "center" }}>
+                          <button
+                            disabled={!reportText.trim() || reportStatus === "sending"}
+                            onClick={async () => {
+                              setReportStatus("sending");
+                              try {
+                                const res = await fetch("/api/report", {
+                                  method: "POST",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({ seed, description: reportText, testType: question.testType }),
+                                });
+                                setReportStatus(res.ok ? "sent" : "error");
+                              } catch {
+                                setReportStatus("error");
+                              }
+                            }}
+                            style={{ padding: "6px 16px", borderRadius: 7, border: "none", background: GOLD, color: "#fff", fontSize: 12, fontWeight: 600, cursor: reportText.trim() ? "pointer" : "not-allowed", opacity: reportText.trim() ? 1 : 0.45 }}
+                          >
+                            {reportStatus === "sending" ? "Sending…" : "Send"}
+                          </button>
+                          <button onClick={() => setReportOpen(false)} style={{ fontSize: 11, color: "rgba(var(--text-rgb),0.3)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                            Cancel
+                          </button>
+                          {reportStatus === "error" && <span style={{ fontSize: 11, color: "rgba(220,80,80,0.8)" }}>Failed to send — please try again.</span>}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

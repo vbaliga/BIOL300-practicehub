@@ -21,13 +21,14 @@ export function FormulaCard({ f }: { f: Formula }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         borderRadius: 12,
-        border: `1px solid ${hovered ? "rgba(var(--gold-rgb),0.5)" : "rgba(var(--gold-rgb),0.14)"}`,
-        background: hovered ? "rgba(var(--gold-rgb),0.06)" : "rgba(var(--text-rgb),0.025)",
+        border: `1px solid ${hovered ? "rgba(var(--gold-rgb),0.5)" : "rgba(var(--text-rgb),0.08)"}`,
+        borderLeft: hovered ? `3px solid var(--gold)` : "3px solid rgba(var(--gold-rgb),0.3)",
+        background: hovered ? "rgba(var(--gold-rgb),0.04)" : "var(--surface)",
         padding: "14px 18px",
         cursor: "default",
         transform: hovered ? "translateY(-2px) scale(1.01)" : "translateY(0) scale(1)",
         transition: "transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease",
-        boxShadow: hovered ? "0 8px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(var(--gold-rgb),0.18)" : "none",
+        boxShadow: hovered ? "0 6px 20px rgba(0,0,0,0.12), 0 0 0 1px rgba(var(--gold-rgb),0.18)" : "0 1px 3px rgba(0,0,0,0.05)",
         position: "relative",
         zIndex: hovered ? 2 : 1,
       }}
@@ -124,12 +125,12 @@ export default function FormulaSheetPage() {
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 36 }}>
             <button type="button" onClick={() => setActiveSection(null)} className="fchip"
-              style={{ padding: "5px 14px", borderRadius: 100, fontSize: 11, fontWeight: 600, cursor: "pointer", border: `1px solid ${!activeSection ? "rgba(var(--gold-rgb),0.6)" : "rgba(var(--text-rgb),0.12)"}`, background: !activeSection ? "rgba(var(--gold-rgb),0.14)" : "transparent", color: !activeSection ? GOLD_LIGHT : "rgba(var(--text-rgb),0.45)" }}>
+              style={{ padding: "5px 14px", borderRadius: 100, fontSize: 11, fontWeight: 600, cursor: "pointer", border: `1px solid ${!activeSection ? "rgba(var(--gold-rgb),0.6)" : "rgba(var(--text-rgb),0.12)"}`, background: !activeSection ? "rgba(var(--gold-rgb),0.14)" : "transparent", color: !activeSection ? GOLD : "rgba(var(--text-rgb),0.45)" }}>
               All
             </button>
             {SECTIONS.map(s => (
               <button key={s.id} type="button" onClick={() => setActiveSection(activeSection === s.id ? null : s.id)} className="fchip"
-                style={{ padding: "5px 14px", borderRadius: 100, fontSize: 11, fontWeight: 600, cursor: "pointer", border: `1px solid ${activeSection === s.id ? "rgba(var(--gold-rgb),0.6)" : "rgba(var(--text-rgb),0.12)"}`, background: activeSection === s.id ? "rgba(var(--gold-rgb),0.14)" : "transparent", color: activeSection === s.id ? GOLD_LIGHT : "rgba(var(--text-rgb),0.45)" }}>
+                style={{ padding: "5px 14px", borderRadius: 100, fontSize: 11, fontWeight: 600, cursor: "pointer", border: `1px solid ${activeSection === s.id ? "rgba(var(--gold-rgb),0.6)" : "rgba(var(--text-rgb),0.12)"}`, background: activeSection === s.id ? "rgba(var(--gold-rgb),0.14)" : "transparent", color: activeSection === s.id ? GOLD : "rgba(var(--text-rgb),0.45)" }}>
                 {s.title}
               </button>
             ))}
