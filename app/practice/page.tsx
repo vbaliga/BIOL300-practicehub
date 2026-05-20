@@ -298,10 +298,10 @@ function FormulaPanel({ open, onClose }: { open: boolean; onClose: () => void })
         }}
       />
 
-      {/* Panel — always dark regardless of page theme */}
-      <div data-theme="dark" style={{
+      {/* Panel — follows page theme */}
+      <div style={{
         position: "fixed", top: 0, right: 0, bottom: 0, width: 400,
-        background: "#001e3c",
+        background: "var(--surface)",
         borderLeft: "1px solid rgba(var(--gold-rgb),0.25)",
         zIndex: 201,
         display: "flex", flexDirection: "column",
