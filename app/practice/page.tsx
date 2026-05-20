@@ -730,7 +730,7 @@ export default function PracticePage() {
                         ) : (
                           <button
                             onClick={() => setReportOpen(o => !o)}
-                            style={{ fontSize: 10, color: "rgba(var(--text-rgb),0.3)", background: "none", border: "none", cursor: "pointer", padding: 0, textDecoration: "underline" }}
+                            style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.35)", background: "none", border: "none", cursor: "pointer", padding: 0, textDecoration: "underline" }}
                           >
                             Report an issue
                           </button>
