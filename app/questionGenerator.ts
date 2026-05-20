@@ -442,8 +442,8 @@ function generateChiSquareGOF(rng: () => number): GeneratedQuestion {
     .replace("{o3}", String(observed[2] ?? ""))
     .replace("{o4}", String(observed[3] ?? ""));
 
-  const blocks: AnswerBlock[] = [
-    { kind: "heading", text: `Test: Chi-Square Goodness-of-Fit` },
+  const chiBlocks: AnswerBlock[] = [
+    { kind: "heading", text: k === 2 ? "Alternative Approach: Chi-Square Goodness-of-Fit" : "Test: Chi-Square Goodness-of-Fit" },
     { kind: "text",    text: `$H_0$: ${sc.null0}` },
     { kind: "text",    text: `$H_a$: ${sc.altH}` },
     { kind: "heading", text: "Calculation" },
@@ -461,16 +461,19 @@ function generateChiSquareGOF(rng: () => number): GeneratedQuestion {
         : `We fail to reject $H_0$ ($\\chi^2 = ${fmt(chiSq, 3)}$, $df = ${df}$, ${pRange}, $\\alpha = 0.05$). The data are consistent with the expected distribution.` },
   ];
 
-  // For 2-category scenarios, also show the equivalent binomial test
+  let blocks: AnswerBlock[];
+
   if (k === 2) {
     const p0 = sc.ratios[0] / totalRatio;
     const binomPVal = binomialExactPValue(observed[0], N, p0);
     const binomPRange = binomialPRange(binomPVal);
     const pHat = round(observed[0] / N, 3);
     const binomSig = binomPVal < 0.05;
-    blocks.push(
-      { kind: "heading", text: "Alternative Approach: Binomial Test" },
-      { kind: "text", text: `Since there are only two categories, a binomial test is equally valid. Treat "${sc.labels[0]}" as a "success" with null proportion $p_0 = ${fmt(p0, 4)}$:` },
+    blocks = [
+      { kind: "heading", text: "Test: Binomial Test" },
+      { kind: "text", text: `$H_0$: ${sc.null0}` },
+      { kind: "text", text: `$H_a$: ${sc.altH}` },
+      { kind: "heading", text: "Calculation" },
       { kind: "formula",
         label: "Sample proportion",
         formula: `$\\hat{p} = k/n = ${observed[0]}/${N}$`,
@@ -478,10 +481,13 @@ function generateChiSquareGOF(rng: () => number): GeneratedQuestion {
       { kind: "text", text: `Exact two-tailed binomial P-value ($n = ${N}$, $k = ${observed[0]}$, $p_0 = ${fmt(p0, 4)}$):` },
       { kind: "pvalue", range: binomPRange },
       { kind: "conclusion", text: binomSig
-          ? `We reject $H_0$ (${binomPRange}, $\\alpha = 0.05$). The binomial test confirms a significant deviation from $p_0 = ${fmt(p0, 4)}$.`
-          : `We fail to reject $H_0$ (${binomPRange}, $\\alpha = 0.05$). Both tests agree: no significant deviation from $p_0 = ${fmt(p0, 4)}$.` },
-      { kind: "text", text: `**Note:** The $\\chi^2$ GOF and binomial test should reach the same conclusion. The $\\chi^2$ test uses an approximation ($\\chi^2 \\approx z^2$ for two categories), while the binomial test gives an exact P-value — both are acceptable here.` },
-    );
+          ? `We reject $H_0$ ($\\hat{p} = ${pHat}$, ${binomPRange}, $\\alpha = 0.05$). There is significant evidence the proportion deviates from $p_0 = ${fmt(p0, 4)}$.`
+          : `We fail to reject $H_0$ ($\\hat{p} = ${pHat}$, ${binomPRange}, $\\alpha = 0.05$). The data are consistent with $p_0 = ${fmt(p0, 4)}$.` },
+      { kind: "text", text: `**Note:** Since there are only two categories, either test is valid. The $\\chi^2$ GOF uses an approximation ($\\chi^2 \\approx z^2$); the binomial test gives an exact P-value. Both should reach the same conclusion.` },
+      ...chiBlocks,
+    ];
+  } else {
+    blocks = chiBlocks;
   }
 
   return {
