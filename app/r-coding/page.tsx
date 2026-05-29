@@ -357,7 +357,7 @@ export default function RCodingPage() {
           <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(var(--gold-rgb),0.55)", margin: "0 0 10px" }}>Practice</p>
           <h1 style={{ fontSize: 30, fontWeight: 800, color: "var(--text)", letterSpacing: "-0.025em", margin: "0 0 14px" }}>R Coding Questions</h1>
           <p style={{ fontSize: 15, color: "rgba(var(--text-rgb),0.5)", lineHeight: 1.7, margin: 0 }}>
-            Exam-style R code review questions for BIOL 300. Each question presents a snippet of R code and asks you to identify whether it correctly addresses the stated biological question — and if not, why not.
+            Exam-style R coding questions for BIOL 300. Each question presents a biological scenario and a block of R code — identify any errors in the code or analysis, and explain what is wrong. If there are no errors, write "No mistakes".
           </p>
         </div>
 
