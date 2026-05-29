@@ -31,8 +31,8 @@ export async function POST(req: NextRequest) {
 
   if (!res.ok) {
     const err = await res.text();
-    console.error("GitHub API error:", err);
-    return NextResponse.json({ error: "Failed to create issue" }, { status: 500 });
+    console.error("GitHub API error:", res.status, err);
+    return NextResponse.json({ error: "Failed to create issue", status: res.status, detail: err }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });
