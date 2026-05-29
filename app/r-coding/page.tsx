@@ -194,7 +194,7 @@ mean difference
           The Q-Q plot clearly shows that the differences are <strong>right-skewed</strong>: points in the upper tail (corresponding to differences of 3.4, 4.5, and 6.0) curve well above the reference line. All 15 differences are positive and the distribution has a long right tail, which is inconsistent with normality.
         </Prose>
         <Prose>
-          Before proceeding with the t-test, the researcher should have tried a transformation (e.g., log) to achieve approximate normality, or — if no transformation works — used a non-parametric alternative such as the <strong>Wilcoxon signed-rank test</strong>.
+          Before proceeding with the t-test, the researcher should have tried a transformation (e.g., log) to see whether it achieves approximate normality in the differences.
         </Prose>
         <Prose>
           Note that the code itself is correct: <code>t.test(before, after, paired = TRUE)</code> is the right function call for a paired test. The error is in the conclusion, which ignores the violated assumption flagged by the researcher's own Q-Q plot.
