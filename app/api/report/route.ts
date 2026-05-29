@@ -26,7 +26,6 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify({
       title: `Student report: seed ${seed} (${testType ?? "unknown"})`,
       body: issueBody,
-      labels: ["student-report"],
     }),
   });
 
