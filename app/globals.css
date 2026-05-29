@@ -15,6 +15,14 @@ html { zoom: 1.2; }
   --text-rgb:    0, 33, 69;
   --text:        #002145;
 
+  /* Feedback / pitfall colours — light */
+  --feedback-wrong-text:    #b52a2a;
+  --feedback-correct-text:  #1e7a36;
+  --feedback-example-text:  #1a4faa;
+  --feedback-wrong-label:   rgba(175,40,40,0.75);
+  --feedback-correct-label: rgba(30,120,56,0.75);
+  --feedback-example-label: rgba(26,79,170,0.75);
+
   /* Flowchart node colours — light */
   --node-decision-border: rgba(0,85,183,0.35);
   --node-decision-bg:     rgba(0,85,183,0.06);
@@ -42,6 +50,14 @@ html { zoom: 1.2; }
   --gold-rgb:    90, 179, 204;
   --text-rgb:    255, 255, 255;
   --text:        #ffffff;
+
+  /* Feedback / pitfall colours — dark */
+  --feedback-wrong-text:    rgba(255,150,150,0.9);
+  --feedback-correct-text:  rgba(200,240,190,0.9);
+  --feedback-example-text:  rgba(160,200,255,0.85);
+  --feedback-wrong-label:   rgba(220,80,80,0.7);
+  --feedback-correct-label: rgba(134,197,120,0.7);
+  --feedback-example-label: rgba(99,164,255,0.7);
 
   /* Flowchart node colours — dark */
   --node-decision-border: rgba(99,164,255,0.42);

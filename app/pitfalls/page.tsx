@@ -132,8 +132,8 @@ function ScenarioCard({ s }: { s: Scenario }) {
           let bg = "transparent";
           let color = "rgba(var(--text-rgb),0.6)";
           if (revealed) {
-            if (isCorrect)    { border = "rgba(134,197,120,0.55)"; bg = "rgba(134,197,120,0.08)"; color = "#a8e09a"; }
-            else if (chosen)  { border = "rgba(220,80,80,0.5)"; bg = "rgba(220,80,80,0.07)"; color = "rgba(255,130,130,0.9)"; }
+            if (isCorrect)    { border = "rgba(134,197,120,0.55)"; bg = "rgba(134,197,120,0.08)"; color = "var(--feedback-correct-text)"; }
+            else if (chosen)  { border = "rgba(220,80,80,0.5)"; bg = "rgba(220,80,80,0.07)"; color = "var(--feedback-wrong-text)"; }
             else              { color = "rgba(var(--text-rgb),0.2)"; }
           } else if (chosen) {
             border = "rgba(var(--gold-rgb),0.5)"; bg = "rgba(var(--gold-rgb),0.08)"; color = GOLD_LIGHT;
@@ -157,7 +157,7 @@ function ScenarioCard({ s }: { s: Scenario }) {
       </div>
       {revealed && (
         <div style={{ padding: "14px 16px", borderRadius: 10, border: `1px solid ${correct ? "rgba(134,197,120,0.3)" : "rgba(220,80,80,0.25)"}`, background: correct ? "rgba(134,197,120,0.06)" : "rgba(220,80,80,0.06)" }}>
-          <p style={{ fontSize: 12, fontWeight: 700, color: correct ? "#a8e09a" : "rgba(255,130,130,0.9)", margin: "0 0 6px" }}>
+          <p style={{ fontSize: 12, fontWeight: 700, color: correct ? "var(--feedback-correct-text)" : "var(--feedback-wrong-text)", margin: "0 0 6px" }}>
             {correct ? "Correct!" : `Incorrect — the better statement is ${s.correctAnswer}`}
           </p>
           <p style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.55)", lineHeight: 1.6, margin: 0 }}>{s.explanation}</p>
@@ -225,20 +225,20 @@ export default function PitfallsPage() {
                   <div style={{ padding: "0 20px 20px" }}>
                     {/* Example wrong statement */}
                     <div style={{ padding: "10px 14px", borderRadius: 8, background: "rgba(220,80,80,0.07)", border: "1px solid rgba(220,80,80,0.2)", marginBottom: 16 }}>
-                      <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(220,80,80,0.6)", marginBottom: 5 }}>Common (wrong) statement</div>
-                      <p style={{ fontSize: 13, color: "rgba(255,150,150,0.85)", lineHeight: 1.55, margin: 0, fontStyle: "italic" }}>{p.misconception}</p>
+                      <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--feedback-wrong-label)", marginBottom: 5 }}>Common (wrong) statement</div>
+                      <p style={{ fontSize: 13, color: "var(--feedback-wrong-text)", lineHeight: 1.55, margin: 0, fontStyle: "italic" }}>{p.misconception}</p>
                     </div>
 
                     {/* Correction */}
                     <div style={{ padding: "10px 14px", borderRadius: 8, background: "rgba(134,197,120,0.06)", border: "1px solid rgba(134,197,120,0.2)", marginBottom: p.example || p.tip ? 16 : 0 }}>
-                      <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(134,197,120,0.6)", marginBottom: 5 }}>Correction</div>
-                      <p style={{ fontSize: 13, color: "rgba(200,240,190,0.85)", lineHeight: 1.6, margin: 0 }}>{p.correction}</p>
+                      <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--feedback-correct-label)", marginBottom: 5 }}>Correction</div>
+                      <p style={{ fontSize: 13, color: "var(--feedback-correct-text)", lineHeight: 1.6, margin: 0 }}>{p.correction}</p>
                     </div>
 
                     {p.example && (
                       <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 8, background: "rgba(99,164,255,0.06)", border: "1px solid rgba(99,164,255,0.18)" }}>
-                        <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(99,164,255,0.6)", marginBottom: 5 }}>Example</div>
-                        <p style={{ fontSize: 13, color: "rgba(160,200,255,0.8)", lineHeight: 1.6, margin: 0 }}>{p.example}</p>
+                        <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--feedback-example-label)", marginBottom: 5 }}>Example</div>
+                        <p style={{ fontSize: 13, color: "var(--feedback-example-text)", lineHeight: 1.6, margin: 0 }}>{p.example}</p>
                       </div>
                     )}
 
