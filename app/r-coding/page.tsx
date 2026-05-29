@@ -136,6 +136,73 @@ function QuestionCard({ q, index }: { q: RQuestion; index: number }) {
 
 const QUESTIONS: RQuestion[] = [
   {
+    id: "q2-paired-t-nonnormal",
+    title: "Paired t-Test: biomarker levels before and after cancer therapy",
+    topic: "Paired t-Test",
+    errorType: "silent",
+    body: (
+      <>
+        <Prose>
+          A biomedical research lab is studying whether a new experimental cancer therapy changes the level of a blood biomarker associated with tumour activity (measured in ng/mL). The same 15 patients are measured before and after receiving the therapy. The researcher wants to test whether the therapy changes biomarker levels, with H₀: μ<sub>difference</sub> = 0 and H<sub>A</sub>: μ<sub>difference</sub> ≠ 0, using α&nbsp;=&nbsp;0.05. Paired differences are defined as <em>difference = before − after</em>.
+        </Prose>
+        <Code>{`before <- c(10.2, 11.4,  9.8, 12.1, 10.9,
+            11.7, 10.5,  9.9, 12.8, 11.1,
+            10.7, 12.3, 11.9, 10.8, 13.2)
+
+after  <- c(10.1, 11.2,  9.5, 11.7, 10.4,
+            11.1,  9.7,  8.9, 11.6,  9.6,
+             8.7,  9.7,  8.5,  6.3,  7.2)
+
+diff <- before - after
+diff`}</Code>
+        <ROutput>{`[1] 0.1 0.2 0.3 0.4 0.5 0.6 0.8 1.0 1.2 1.5 2.0 2.6 3.4 4.5 6.0`}</ROutput>
+        <Prose>The researcher then produces a Q-Q plot of the differences:</Prose>
+        <Code>{`qqnorm(diff, main = "Q-Q Plot of Paired Differences")
+qqline(diff)`}</Code>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/qqplot-paired-diff.png"
+          alt="Q-Q plot of paired differences showing right-skewed deviation from normality"
+          style={{ display: "block", maxWidth: "100%", borderRadius: 8, margin: "12px 0", border: "1px solid rgba(var(--text-rgb),0.08)" }}
+        />
+        <Prose>The researcher then runs:</Prose>
+        <Code>{`t.test(before, after, paired = TRUE)`}</Code>
+        <ROutput>{`\tPaired t-test
+
+data:  before and after
+t = 4.097, df = 14, p-value = 0.0011
+alternative hypothesis: true mean difference is not equal to 0
+95 percent confidence interval:
+ 1.006 3.180
+sample estimates:
+mean difference
+          2.093`}</ROutput>
+        <Prose>
+          The researcher concludes: <em>"Because p = 0.0011 is less than α = 0.05, we reject the null hypothesis. There is statistically significant evidence that the experimental cancer therapy changes biomarker levels."</em>
+        </Prose>
+      </>
+    ),
+    answer: (
+      <>
+        <Prose>
+          <strong>The normality assumption of the paired t-test is not met, yet the researcher proceeds without acknowledging this.</strong>
+        </Prose>
+        <Prose>
+          The paired t-test requires that the paired differences are approximately normally distributed. With only n&nbsp;=&nbsp;15 pairs, this assumption is important — the Central Limit Theorem provides little protection at this sample size.
+        </Prose>
+        <Prose>
+          The Q-Q plot clearly shows that the differences are <strong>right-skewed</strong>: points in the upper tail (corresponding to differences of 3.4, 4.5, and 6.0) curve well above the reference line. All 15 differences are positive and the distribution has a long right tail, which is inconsistent with normality.
+        </Prose>
+        <Prose>
+          Before proceeding with the t-test, the researcher should have tried a transformation (e.g., log) to achieve approximate normality, or — if no transformation works — used a non-parametric alternative such as the <strong>Wilcoxon signed-rank test</strong>.
+        </Prose>
+        <Prose>
+          Note that the code itself is correct: <code>t.test(before, after, paired = TRUE)</code> is the right function call for a paired test. The error is in the conclusion, which ignores the violated assumption flagged by the researcher's own Q-Q plot.
+        </Prose>
+      </>
+    ),
+  },
+  {
     id: "q1-poisson-last-bin",
     title: "Poisson Goodness-of-Fit: immune cell counts per microscope field",
     topic: "Poisson GOF",
