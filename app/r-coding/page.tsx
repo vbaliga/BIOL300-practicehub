@@ -361,22 +361,6 @@ export default function RCodingPage() {
           </p>
         </div>
 
-        {/* Philosophy cards */}
-        <section style={{ marginBottom: 36 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
-            <div style={{ width: 3, height: 16, borderRadius: 2, background: GOLD, flexShrink: 0 }} />
-            <h2 style={{ fontSize: 13, fontWeight: 700, color: "rgba(var(--text-rgb),0.7)", margin: 0 }}>What to expect</h2>
-          </div>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            {PHILOSOPHY.map(p => (
-              <div key={p.title} style={{ flex: "1 1 200px", padding: "14px 16px", borderRadius: 12, border: "1px solid rgba(var(--text-rgb),0.07)", background: "rgba(var(--text-rgb),0.02)" }}>
-                <div style={{ fontSize: 16, marginBottom: 6 }}>{p.icon}</div>
-                <div style={{ fontSize: 12, fontWeight: 700, color: "rgba(var(--text-rgb),0.8)", marginBottom: 4 }}>{p.title}</div>
-                <p style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.4)", lineHeight: 1.6, margin: 0 }}>{p.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* Questions */}
         <section>
