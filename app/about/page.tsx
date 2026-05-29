@@ -88,6 +88,7 @@ export default function AboutPage() {
               { href: "/formula-sheet", label: "Formula Sheet",            desc: "Hover-to-explain interactive formula reference" },
               { href: "/flowchart",    label: "What Test? Flowchart",      desc: "Interactive decision flowchart with chapter filtering" },
               { href: "/pitfalls",     label: "Statistical Pitfalls",      desc: "Common misconceptions with self-test scenarios" },
+              { href: "/r-coding",    label: "R Coding Questions",        desc: "Exam-style code review: spot the statistical error (or confirm there isn't one)" },
             ].map(item => (
               <li key={item.href}>
                 <Link href={item.href} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(var(--gold-rgb),0.12)", background: "rgba(var(--gold-rgb),0.03)", textDecoration: "none", transition: "border-color 0.15s" }}

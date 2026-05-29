@@ -25,6 +25,12 @@ const FEATURES = [
     title: "Statistical Pitfalls",
     description: "Four common misconceptions with self-test scenarios to check your reasoning.",
   },
+  {
+    href: "/r-coding",
+    symbol: "R",
+    title: "R Coding Questions",
+    description: "Exam-style code review: spot the statistical error (or confirm there isn't one).",
+  },
 ];
 
 
@@ -133,7 +139,7 @@ export default function Home() {
         <section style={{ maxWidth: 1080, margin: "0 auto", padding: "36px 28px 72px" }}>
           <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.14em", color: "rgba(var(--text-rgb),0.35)", margin: "0 0 8px" }}>Tools</p>
           <h2 style={{ fontSize: 20, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.02em", margin: "0 0 20px" }}>Tools to help you prepare</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
             {FEATURES.map((f) => (
               <Link key={f.title} href={f.href} className="card-tool">
                 <div style={{ width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 700, fontFamily: "ui-serif, Georgia, serif", background: "rgba(var(--gold-rgb),0.1)", color: "var(--gold)", marginBottom: 16 }}>
@@ -155,6 +161,7 @@ export default function Home() {
               { href: "/formula-sheet", label: "Formulas" },
               { href: "/flowchart",     label: "Flowchart" },
               { href: "/pitfalls",      label: "Pitfalls" },
+              { href: "/r-coding",      label: "R Coding" },
               { href: "/about",         label: "About" },
             ].map(l => (
               <Link key={l.href} href={l.href} style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.4)", textDecoration: "none" }}>{l.label}</Link>
