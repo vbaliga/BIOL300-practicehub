@@ -136,6 +136,72 @@ function QuestionCard({ q, index }: { q: RQuestion; index: number }) {
 
 const QUESTIONS: RQuestion[] = [
   {
+    id: "q3-anova-wrong-function",
+    title: "One-Way ANOVA: maze-completion time across sound conditions",
+    topic: "One-Way ANOVA",
+    errorType: "wrong-arg",
+    body: (
+      <>
+        <Prose>
+          A biology student is studying whether different types of "productivity music" affect how quickly lab mice complete a simple maze. Mice are randomly assigned to one of three sound conditions: <em>silence</em>, <em>classical</em>, or <em>lofi_beats</em>. The response variable is maze completion time (seconds), stored in a CSV file.
+        </Prose>
+        <Prose>The student imports and inspects the data:</Prose>
+        <Code>{`# a.
+mouseData <-
+  read.csv("DataForLabs/MouseMazeMusicData.csv",
+           stringsAsFactors = TRUE)
+
+# b.
+mouseData`}</Code>
+        <ROutput>{`   maze_time sound_condition
+1         42         silence
+2         45         silence
+3         44         silence
+4         47         silence
+5         43         silence
+6         39       classical
+7         41       classical
+8         38       classical
+9         40       classical
+10        42       classical
+11        35      lofi_beats
+12        37      lofi_beats
+13        36      lofi_beats
+14        34      lofi_beats
+15        38      lofi_beats`}</ROutput>
+        <Prose>
+          The student wants to test H₀: μ<sub>silence</sub> = μ<sub>classical</sub> = μ<sub>lofi_beats</sub> vs. H<sub>A</sub>: at least one group mean differs, with α&nbsp;=&nbsp;0.05. They write:
+        </Prose>
+        <Code>{`# c.
+anova(maze_time ~ sound_condition, data = mouseData)`}</Code>
+      </>
+    ),
+    answer: (
+      <>
+        <Prose>
+          <strong>Parts a and b are correct.</strong> The data are imported and printed without issue.
+        </Prose>
+        <Prose>
+          <strong>Part c contains an error — the code will not run.</strong> The function <code>anova()</code> expects a fitted model object as its argument (e.g., the output of <code>lm()</code> or <code>aov()</code>). Passing a formula directly causes R to throw:
+        </Prose>
+        <ROutput>{`Error in UseMethod("anova") :
+  no applicable method for 'anova' applied to an object of class "formula"`}</ROutput>
+        <Prose>
+          To fit a one-way ANOVA and obtain the test results, the student should use <code>aov()</code> to fit the model and <code>summary()</code> to display the ANOVA table:
+        </Prose>
+        <Code>{`summary(aov(maze_time ~ sound_condition, data = mouseData))`}</Code>
+        <ROutput>{`                Df Sum Sq Mean Sq F value   Pr(>F)
+sound_condition  2  168.1   84.07   28.99 2.54e-05 ***
+Residuals       12   34.8    2.90
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1`}</ROutput>
+        <Prose>
+          With the correct function, F = 28.99, df = (2, 12), p &lt; 0.001 — strong evidence against H₀.
+        </Prose>
+      </>
+    ),
+  },
+  {
     id: "q2-paired-t-nonnormal",
     title: "Paired t-Test: biomarker levels before and after cancer therapy",
     topic: "Paired t-Test",
