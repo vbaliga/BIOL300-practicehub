@@ -728,12 +728,7 @@ export default function PracticePage() {
                         {reportStatus === "sent" ? (
                           <span style={{ fontSize: 11, color: "rgba(134,197,120,0.9)", fontWeight: 600 }}>✓ Reported</span>
                         ) : (
-                          <button
-                            onClick={() => setReportOpen(o => !o)}
-                            style={{ fontSize: 11, fontWeight: 600, color: "var(--gold)", background: "rgba(var(--gold-rgb),0.08)", border: "1px solid rgba(var(--gold-rgb),0.3)", borderRadius: 20, cursor: "pointer", padding: "4px 12px", lineHeight: 1.4 }}
-                          >
-                            Report an issue
-                          </button>
+                          null
                         )}
                       </div>
                     </div>

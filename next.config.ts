@@ -1,17 +1,16 @@
 import type { NextConfig } from "next";
 
+const isGithubPages = process.env.GITHUB_PAGES === "true";
+const repoName = "biol300";
+
 const nextConfig: NextConfig = {
-  async headers() {
-    return [
-      {
-        source: "/r-fix",
-        headers: [
-          { key: "Cross-Origin-Opener-Policy",   value: "same-origin" },
-          { key: "Cross-Origin-Embedder-Policy", value: "credentialless" },
-        ],
-      },
-    ];
+  output: "export",
+  trailingSlash: true,
+  images: {
+    unoptimized: true,
   },
+  basePath: isGithubPages ? `/${repoName}` : "",
+  assetPrefix: isGithubPages ? `/${repoName}/` : "",
 };
 
 export default nextConfig;
