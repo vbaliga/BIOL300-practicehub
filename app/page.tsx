@@ -1,12 +1,27 @@
 import Link from "next/link";
 
-const FEATURES = [
+const PRACTICE = [
   {
     href: "/practice",
     symbol: "∑",
     title: "Hypothesis Test Generator",
     description: "Unlimited worked questions for every test in BIOL 300, with step-by-step solutions.",
   },
+  {
+    href: "/r-coding",
+    symbol: "R",
+    title: "R Coding Questions",
+    description: "Exam-style code review: spot the statistical error (or confirm there isn't one).",
+  },
+  {
+    href: "/r-fix",
+    symbol: "✎",
+    title: "Fix the Code",
+    description: "Each question shows broken R code. Edit it directly to fix the mistake and get instant feedback.",
+  },
+];
+
+const REFERENCE = [
   {
     href: "/formula-sheet",
     symbol: "μ",
@@ -24,12 +39,6 @@ const FEATURES = [
     symbol: "!",
     title: "Statistical Pitfalls",
     description: "Four common misconceptions with self-test scenarios to check your reasoning.",
-  },
-  {
-    href: "/r-coding",
-    symbol: "R",
-    title: "R Coding Questions",
-    description: "Exam-style code review: spot the statistical error (or confirm there isn't one).",
   },
 ];
 
@@ -100,7 +109,7 @@ export default function Home() {
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
               <Link href="/about" style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", textDecoration: "none" }}>About</Link>
-              <Link href="/practice" className="btn-primary" style={{ padding: "7px 18px", fontSize: 13 }}>Practice</Link>
+              <Link href="/start" className="btn-primary" style={{ padding: "7px 18px", fontSize: 13 }}>Practice</Link>
             </div>
           </div>
         </header>
@@ -121,7 +130,7 @@ export default function Home() {
                 </p>
               </div>
               <div style={{ display: "flex", gap: 10, flexShrink: 0, flexWrap: "wrap" }}>
-                <Link href="/practice" className="btn-primary" style={{ padding: "9px 22px", fontSize: 13 }}>Start practising</Link>
+                <Link href="/start" className="btn-primary" style={{ padding: "9px 22px", fontSize: 13 }}>Start practising</Link>
                 <a
                   href="https://biologyprogram-2023.sites.olt.ubc.ca/files/2025/08/Syllabus_BIOL300_2025.pdf"
                   target="_blank"
@@ -135,12 +144,30 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Tools */}
-        <section style={{ maxWidth: 1080, margin: "0 auto", padding: "36px 28px 72px" }}>
-          <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.14em", color: "rgba(var(--text-rgb),0.35)", margin: "0 0 8px" }}>Tools</p>
-          <h2 style={{ fontSize: 20, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.02em", margin: "0 0 20px" }}>Tools to help you prepare</h2>
+        {/* Practice */}
+        <section style={{ maxWidth: 1080, margin: "0 auto", padding: "36px 28px 0" }}>
+          <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.14em", color: "rgba(var(--text-rgb),0.35)", margin: "0 0 8px" }}>Practice</p>
+          <h2 style={{ fontSize: 20, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.02em", margin: "0 0 20px" }}>Practice questions</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
-            {FEATURES.map((f) => (
+            {PRACTICE.map((f) => (
+              <Link key={f.title} href={f.href} className="card-tool">
+                <div style={{ width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 700, fontFamily: "ui-serif, Georgia, serif", background: "rgba(var(--gold-rgb),0.1)", color: "var(--gold)", marginBottom: 16 }}>
+                  {f.symbol}
+                </div>
+                <h3 style={{ fontSize: 15, fontWeight: 600, color: "var(--text)", margin: "0 0 8px", letterSpacing: "-0.01em" }}>{f.title}</h3>
+                <p style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.5)", lineHeight: 1.65, margin: "0 0 16px", flex: 1 }}>{f.description}</p>
+                <span style={{ fontSize: 13, fontWeight: 600, color: "var(--gold)" }}>Open tool →</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Reference */}
+        <section style={{ maxWidth: 1080, margin: "0 auto", padding: "36px 28px 72px" }}>
+          <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.14em", color: "rgba(var(--text-rgb),0.35)", margin: "0 0 8px" }}>Reference</p>
+          <h2 style={{ fontSize: 20, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.02em", margin: "0 0 20px" }}>Reference material</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+            {REFERENCE.map((f) => (
               <Link key={f.title} href={f.href} className="card-tool">
                 <div style={{ width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 700, fontFamily: "ui-serif, Georgia, serif", background: "rgba(var(--gold-rgb),0.1)", color: "var(--gold)", marginBottom: 16 }}>
                   {f.symbol}

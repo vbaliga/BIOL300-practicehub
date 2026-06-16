@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@r-wasm/webr": "^0.2.0",
     "@types/dagre": "^0.7.54",
     "@types/katex": "^0.16.8",
     "@xyflow/react": "^12.10.2",

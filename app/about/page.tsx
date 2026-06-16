@@ -18,7 +18,7 @@ export default function AboutPage() {
             <span style={{ color: "rgba(var(--text-rgb),0.2)", fontSize: 14 }}>/</span>
             <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>About</span>
           </div>
-          <Link href="/practice" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practice →</Link>
+          <Link href="/start" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practice →</Link>
         </div>
       </header>
 
@@ -85,10 +85,10 @@ export default function AboutPage() {
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
             {[
               { href: "/practice",     label: "Hypothesis Test Generator", desc: "Unlimited worked practice questions for every test in BIOL 300" },
+              { href: "/r-coding",     label: "R Coding Questions",        desc: "Exam-style code review: spot the statistical error (or confirm there isn't one)" },
               { href: "/formula-sheet", label: "Formula Sheet",            desc: "Hover-to-explain interactive formula reference" },
               { href: "/flowchart",    label: "What Test? Flowchart",      desc: "Interactive decision flowchart with chapter filtering" },
               { href: "/pitfalls",     label: "Statistical Pitfalls",      desc: "Common misconceptions with self-test scenarios" },
-              { href: "/r-coding",    label: "R Coding Questions",        desc: "Exam-style code review: spot the statistical error (or confirm there isn't one)" },
             ].map(item => (
               <li key={item.href}>
                 <Link href={item.href} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(var(--gold-rgb),0.12)", background: "rgba(var(--gold-rgb),0.03)", textDecoration: "none", transition: "border-color 0.15s" }}

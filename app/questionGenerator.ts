@@ -1577,7 +1577,7 @@ function generateFishersExact(rng: () => number): GeneratedQuestion {
 
   const qText =
     `${sc.context} The observed counts are shown below. ` +
-    `Calculate the expected cell counts and determine whether a chi-square contingency test or Fisher's Exact Test is more appropriate. ` +
+    `Calculate the expected cell counts and determine which among the following hypothesis tests would be most appropriate to do: a chi-square contingency test or Fisher's Exact Test. ` +
     `Justify your choice using the relevant assumptions. Use α = 0.05.\n\n` + obsTable;
 
   const blocks: AnswerBlock[] = [
