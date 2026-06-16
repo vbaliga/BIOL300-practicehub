@@ -478,10 +478,11 @@ export default function RFixPage() {
       if (cancelled) return;
       webRRef.current = webR;
       setStatus("Installing packages…");
-      await webR.installPackages(["tidyverse", "binom", "car"], true);
+      await webR.installPackages(["dplyr", "ggplot2", "binom", "car"], true);
       setStatus("Loading packages…");
       await webR.evalRVoid(`
-        library(tidyverse)
+        library(dplyr)
+        library(ggplot2)
         library(binom)
         library(car)
       `);
