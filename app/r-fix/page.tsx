@@ -470,8 +470,9 @@ export default function RFixPage() {
 
   useEffect(() => {
     // Register service worker for COOP/COEP headers (needed for SharedArrayBuffer on static hosts)
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
     if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/coi-serviceworker.js").then(reg => {
+      navigator.serviceWorker.register(`${basePath}/coi-serviceworker.js`).then(reg => {
         if (!crossOriginIsolated && reg.active) {
           window.location.reload();
         }
@@ -512,7 +513,7 @@ export default function RFixPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
-      <Script src="/coi-serviceworker.js" strategy="beforeInteractive" />
+      <Script src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/coi-serviceworker.js`} strategy="beforeInteractive" />
 
       {/* Nav */}
       <header style={{ background: "var(--surface)", borderBottom: "1px solid rgba(var(--text-rgb),0.08)", position: "sticky", top: 0, zIndex: 50 }}>
