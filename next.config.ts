@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const isGithubPages = process.env.GITHUB_PAGES === "true";
-const repoName = "biol300";
+const repoName = "BIOL300-practicehub";
 
 const nextConfig: NextConfig = {
   output: "export",
