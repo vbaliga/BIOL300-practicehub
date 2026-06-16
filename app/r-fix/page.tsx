@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Script from "next/script";
 
 const GOLD       = "var(--gold)";
 const GOLD_LIGHT = "var(--gold-light)";
@@ -468,29 +469,42 @@ export default function RFixPage() {
   const [currentIdx, setCurrentIdx] = useState(0);
 
   useEffect(() => {
+    // Register service worker for COOP/COEP headers (needed for SharedArrayBuffer on static hosts)
+    if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/coi-serviceworker.js").then(reg => {
+        if (!crossOriginIsolated && reg.active) {
+          window.location.reload();
+        }
+      }).catch(() => {});
+    }
+
     let cancelled = false;
     (async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mod  = await import("@r-wasm/webr") as any;
-      const WebR = mod.WebR ?? mod.default?.WebR ?? mod.default;
-      const webR = new WebR({ baseUrl: "https://webr.r-wasm.org/v0.2.0/" });
-      await webR.init();
-      if (cancelled) return;
-      webRRef.current = webR;
-      setStatus("Installing packages…");
-      await webR.installPackages(["dplyr", "ggplot2", "binom", "car"], true);
-      setStatus("Loading packages…");
-      await webR.evalRVoid(`
-        library(dplyr)
-        library(ggplot2)
-        library(binom)
-        library(car)
-      `);
-      await webR.evalRVoid(`options(device = webr::canvas)`);
-      await webR.flush();
-      setLoading(false);
-      setReady(true);
-    })().catch(console.error);
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const mod  = await import("@r-wasm/webr") as any;
+        const WebR = mod.WebR ?? mod.default?.WebR ?? mod.default;
+        const webR = new WebR({ baseUrl: "https://webr.r-wasm.org/v0.2.0/" });
+        await webR.init();
+        if (cancelled) return;
+        webRRef.current = webR;
+        setStatus("Installing packages…");
+        await webR.installPackages(["dplyr", "binom", "car"], true);
+        setStatus("Loading packages…");
+        await webR.evalRVoid(`
+          library(dplyr)
+          library(binom)
+          library(car)
+        `);
+        await webR.evalRVoid(`options(device = webr::canvas)`);
+        await webR.flush();
+        setLoading(false);
+        setReady(true);
+      } catch (err) {
+        console.error("WebR init failed:", err);
+        setStatus("Failed to load R. Please refresh the page.");
+      }
+    })();
     return () => { cancelled = true; };
   }, []);
 
@@ -498,6 +512,7 @@ export default function RFixPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
+      <Script src="/coi-serviceworker.js" strategy="beforeInteractive" />
 
       {/* Nav */}
       <header style={{ background: "var(--surface)", borderBottom: "1px solid rgba(var(--text-rgb),0.08)", position: "sticky", top: 0, zIndex: 50 }}>
