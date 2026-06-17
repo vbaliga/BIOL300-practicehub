@@ -23,10 +23,69 @@ interface FixQuestion {
   segments: Segment[];
   /** Files to write to WebR VFS so read.csv() works */
   csvFiles?: Array<{ path: string; csv: string }>;
-  validate: (codes: Record<string, string>, lines: OutputLine[]) => boolean;
   /** Correct version of each code segment, keyed by segment id */
   answerCodes: Record<string, string>;
   answerExplanation: React.ReactNode;
+}
+
+// ─── R EXECUTION HELPER ───────────────────────────────────────────────────────
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function runCode(webR: any, code: string): Promise<OutputLine[]> {
+  await webR.flush();
+  webR.writeConsole(code + "\n");
+  const lines: OutputLine[] = [];
+  let plotCanvas: HTMLCanvasElement | null = null;
+  let plotCtx:    CanvasRenderingContext2D | null = null;
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const msg: any = await webR.read();
+    if (msg.type === "prompt") {
+      if (plotCanvas) lines.push({ type: "plot", data: plotCanvas.toDataURL() });
+      if (typeof msg.data === "string" && msg.data.trimStart().startsWith("+")) {
+        webR.writeConsole("\n");
+        lines.push({ type: "stderr", data: "Error: unexpected end of input\n(the expression has unbalanced parentheses or is otherwise incomplete)" });
+      }
+      break;
+    }
+    if (msg.type === "stdout") {
+      lines.push({ type: "stdout", data: msg.data as string });
+    } else if (msg.type === "stderr") {
+      lines.push({ type: "stderr", data: msg.data as string });
+    } else if (msg.type === "canvas") {
+      if (msg.data?.event === "canvasNewPage") {
+        if (plotCanvas) lines.push({ type: "plot", data: plotCanvas.toDataURL() });
+        plotCanvas = document.createElement("canvas");
+        plotCtx    = plotCanvas.getContext("2d");
+      } else if (msg.data?.event === "canvasImage" && plotCtx && plotCanvas) {
+        const bm = msg.data.image as ImageBitmap;
+        if (bm.width  > plotCanvas.width)  plotCanvas.width  = bm.width;
+        if (bm.height > plotCanvas.height) plotCanvas.height = bm.height;
+        plotCtx.drawImage(bm, 0, 0);
+      }
+    }
+  }
+  return lines;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function writeCSV(webR: any, q: FixQuestion) {
+  if (!q.csvFiles) return;
+  for (const { path, csv } of q.csvFiles) {
+    const parts = path.split("/");
+    if (parts.length > 1) {
+      try { await webR.FS.mkdir(parts.slice(0, -1).join("/")); } catch { /* exists */ }
+    }
+    await webR.FS.writeFile(path, new TextEncoder().encode(csv));
+  }
+}
+
+function stdoutOf(lines: OutputLine[]) {
+  return lines.filter(l => l.type === "stdout").map(l => l.data).join("");
+}
+function hasError(lines: OutputLine[]) {
+  return lines.some(l => l.type === "stderr" && l.data.trim().length > 0);
 }
 
 // ─── CSV DATA ─────────────────────────────────────────────────────────────────
@@ -113,21 +172,6 @@ mouseData`,
 anova(maze_time ~ sound_condition, data = mouseData)`,
       },
     ],
-    validate: (codes, lines) => {
-      const ab = codes["ab"] ?? "";
-      const c  = codes["c"]  ?? "";
-      // Part a: stringsAsFactors = TRUE must be present and intact
-      const hasTrue  = /stringsAsFactors\s*=\s*TRUE/.test(ab);
-      // Part c: must use lm() then anova()
-      const hasLm    = /\blm\s*\(/.test(c);
-      const hasAnova = /\banova\s*\(/.test(c);
-      // No errors in output (stderr or rlang-style stdout errors)
-      const hasError = lines.some(l => l.type === "stderr" && l.data.trim().length > 0)
-                    || lines.some(l => l.type === "stdout" && /^Error|^! /.test(l.data));
-      // Output must contain the ANOVA table header
-      const hasTable = lines.some(l => l.type === "stdout" && l.data.includes("Analysis of Variance Table"));
-      return hasTrue && hasLm && hasAnova && !hasError && hasTable;
-    },
     answerCodes: {
       ab:
 `# a.
@@ -196,13 +240,6 @@ colonyData`,
         defaultCode: `filter(colonyData, treatment = "antibiotic")`,
       },
     ],
-    validate: (codes, lines) => {
-      const f = codes["filter"] ?? "";
-      const codeFixed = /treatment\s*==\s*["']antibiotic["']/.test(f);
-      const hasError  = lines.some(l => l.type === "stderr" && l.data.trim().length > 0)
-                     || lines.some(l => l.type === "stdout" && /^Error|^! /.test(l.data));
-      return codeFixed && !hasError;
-    },
     answerCodes: {
       import:
 `colonyData <-
@@ -227,13 +264,14 @@ colonyData`,
 // ─── QUESTION CARD ────────────────────────────────────────────────────────────
 
 function QuestionCard({
-  q, index, webR, ready,
+  q, index, webR, ready, expectedStdout,
 }: {
   q: FixQuestion;
   index: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   webR: any;
   ready: boolean;
+  expectedStdout: string | undefined;
 }) {
   const codeIds = q.segments.filter(s => s.type === "code").map(s => (s as { type:"code"; id:string; defaultCode:string }).id);
   const initCodes = () => Object.fromEntries(
@@ -264,62 +302,14 @@ function QuestionCard({
     setOutput([]);
 
     try {
-      // Write CSV files to WebR VFS so read.csv() works
-      if (q.csvFiles) {
-        for (const { path, csv } of q.csvFiles) {
-          const parts = path.split("/");
-          if (parts.length > 1) {
-            try { await webR.FS.mkdir(parts.slice(0, -1).join("/")); } catch { /* already exists */ }
-          }
-          const enc = new TextEncoder();
-          await webR.FS.writeFile(path, enc.encode(csv));
-        }
-      }
-
-      // Flush stale messages
-      await webR.flush();
-
-      // Run all code segments in order
+      await writeCSV(webR, q);
       const allCode = codeIds.map(id => codes[id] ?? "").join("\n\n");
-      webR.writeConsole(allCode + "\n");
-
-      const lines: OutputLine[] = [];
-      let plotCanvas: HTMLCanvasElement | null = null;
-      let plotCtx:    CanvasRenderingContext2D | null = null;
-
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const msg: any = await webR.read();
-        if (msg.type === "prompt") {
-          if (plotCanvas) lines.push({ type: "plot", data: plotCanvas.toDataURL() });
-          // "+" prompt means R is waiting for more input — incomplete expression
-          if (typeof msg.data === "string" && msg.data.trimStart().startsWith("+")) {
-            webR.writeConsole("\n"); // cancel the incomplete input
-            lines.push({ type: "stderr", data: "Error: unexpected end of input\n(the expression has unbalanced parentheses or is otherwise incomplete)" });
-          }
-          break;
-        }
-        if (msg.type === "stdout") {
-          lines.push({ type: "stdout", data: msg.data as string });
-        } else if (msg.type === "stderr") {
-          lines.push({ type: "stderr", data: msg.data as string });
-        } else if (msg.type === "canvas") {
-          if (msg.data?.event === "canvasNewPage") {
-            if (plotCanvas) lines.push({ type: "plot", data: plotCanvas.toDataURL() });
-            plotCanvas = document.createElement("canvas");
-            plotCtx    = plotCanvas.getContext("2d");
-          } else if (msg.data?.event === "canvasImage" && plotCtx && plotCanvas) {
-            const bm = msg.data.image as ImageBitmap;
-            if (bm.width  > plotCanvas.width)  plotCanvas.width  = bm.width;
-            if (bm.height > plotCanvas.height) plotCanvas.height = bm.height;
-            plotCtx.drawImage(bm, 0, 0);
-          }
-        }
-      }
-
+      const lines = await runCode(webR, allCode);
       setOutput(lines);
-      setCheckState(q.validate(codes, lines) ? "correct" : "incorrect");
+
+      const studentOut = stdoutOf(lines);
+      const correct = !hasError(lines) && expectedStdout !== undefined && studentOut === expectedStdout;
+      setCheckState(correct ? "correct" : "incorrect");
     } catch (e) {
       setOutput([{ type: "stderr", data: String(e) }]);
       setCheckState("incorrect");
@@ -463,6 +453,7 @@ function QuestionCard({
 export default function RFixPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const webRRef  = useRef<any>(null);
+  const expectedRef = useRef<Record<string, string>>({});
   const [ready,      setReady]      = useState(false);
   const [loading,    setLoading]    = useState(true);
   const [status,     setStatus]     = useState("Initialising R…");
@@ -498,6 +489,16 @@ export default function RFixPage() {
           library(car)
         `);
         await webR.evalRVoid(`options(device = webr::canvas)`);
+        await webR.flush();
+        // Precompute expected stdout for each question by running answer codes
+        setStatus("Preparing questions…");
+        for (const q of QUESTIONS) {
+          await writeCSV(webR, q);
+          const codeIds = q.segments.filter(s => s.type === "code").map(s => (s as { type:"code"; id:string; defaultCode:string }).id);
+          const allCode = codeIds.map(id => q.answerCodes[id] ?? "").join("\n\n");
+          const lines = await runCode(webR, allCode);
+          expectedRef.current[q.id] = stdoutOf(lines);
+        }
         await webR.flush();
         setLoading(false);
         setReady(true);
@@ -576,7 +577,7 @@ export default function RFixPage() {
           </div>
         )}
 
-        <QuestionCard key={q.id} q={q} index={currentIdx} webR={webRRef.current} ready={ready} />
+        <QuestionCard key={q.id} q={q} index={currentIdx} webR={webRRef.current} ready={ready} expectedStdout={expectedRef.current[q.id]} />
 
         <footer style={{ marginTop: 48, textAlign: "center", fontSize: 11, color: "rgba(var(--text-rgb),0.2)", paddingBottom: 8 }}>
           BIOL 300 Practice Hub · University of British Columbia
