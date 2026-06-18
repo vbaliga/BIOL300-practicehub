@@ -516,6 +516,40 @@ export default function RFixPage() {
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
       <Script src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/coi-serviceworker.js`} strategy="beforeInteractive" />
 
+      {/* Full-page loading overlay */}
+      {loading && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 200,
+          background: "var(--bg)",
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          gap: 24,
+        }}>
+          {/* Spinner */}
+          <style>{`
+            @keyframes rfix-spin { to { transform: rotate(360deg); } }
+            @keyframes rfix-pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+          `}</style>
+          <div style={{
+            width: 48, height: 48, borderRadius: "50%",
+            border: "3px solid rgba(var(--gold-rgb),0.15)",
+            borderTopColor: "var(--gold)",
+            animation: "rfix-spin 0.9s linear infinite",
+          }} />
+          <div style={{ textAlign: "center" }}>
+            <div style={{
+              fontSize: 15, fontWeight: 700, color: "var(--text)",
+              letterSpacing: "-0.01em", marginBottom: 6,
+              animation: "rfix-pulse 2s ease-in-out infinite",
+            }}>
+              {status}
+            </div>
+            <div style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.3)", maxWidth: 260, lineHeight: 1.6 }}>
+              R is running in your browser via WebAssembly.<br />This only happens once.
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Nav */}
       <header style={{ background: "var(--surface)", borderBottom: "1px solid rgba(var(--text-rgb),0.08)", position: "sticky", top: 0, zIndex: 50 }}>
         <div style={{ maxWidth: 820, margin: "0 auto", padding: "0 28px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -540,13 +574,13 @@ export default function RFixPage() {
           </p>
         </div>
 
-        {/* Status */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
-          <div style={{ width: 8, height: 8, borderRadius: "50%", background: loading ? "#f59e0b" : "#22c55e", flexShrink: 0 }} />
-          <span style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.4)", fontWeight: 600 }}>
-            {loading ? status : "R is ready"}
-          </span>
-        </div>
+        {/* Status dot (shown when ready) */}
+        {!loading && (
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#22c55e", flexShrink: 0 }} />
+            <span style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.4)", fontWeight: 600 }}>R is ready</span>
+          </div>
+        )}
 
         {/* Navigator */}
         {QUESTIONS.length > 1 && (
