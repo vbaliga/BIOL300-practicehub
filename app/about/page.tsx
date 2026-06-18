@@ -60,8 +60,8 @@ export default function AboutPage() {
           </div>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             {[
-              { photo: "/daniel-sobat.jpg", name: "Daniel Sobat", role: "Development & design" },
-              { photo: "/vikram-baliga.jpg", name: "Vikram Baliga", role: "Content & statistical review" },
+              { photo: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/daniel-sobat.jpg`, name: "Daniel Sobat", role: "Development & design" },
+              { photo: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/vikram-baliga.jpg`, name: "Vikram Baliga", role: "Content & statistical review" },
             ].map(c => (
               <div key={c.name} style={{ flex: "1 1 200px", display: "flex", alignItems: "center", gap: 14, padding: "14px 18px", borderRadius: 10, border: "1px solid rgba(var(--text-rgb),0.07)", background: "rgba(var(--text-rgb),0.02)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
