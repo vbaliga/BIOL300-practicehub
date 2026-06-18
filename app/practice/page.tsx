@@ -28,9 +28,6 @@ const CALCULABLE_TYPES: TestType[] = [
 ];
 
 const CHAPTER_OPTIONS = [
-  { value: 1,  label: "Ch. 1 — Statistics and science" },
-  { value: 2,  label: "Ch. 2 — Displaying data" },
-  { value: 3,  label: "Ch. 3 — Describing data" },
   { value: 4,  label: "Ch. 4 — Estimating with uncertainty" },
   { value: 5,  label: "Ch. 5 — Probability" },
   { value: 6,  label: "Ch. 6 — Hypothesis testing (intro)" },
@@ -501,7 +498,7 @@ export default function PracticePage() {
               <div style={{ width: 3, height: 20, borderRadius: 2, background: GOLD, flexShrink: 0 }} />
               <Link href="/" style={{ fontSize: 14, fontWeight: 700, color: GOLD, textDecoration: "none" }}>BIOL 300 Practice Hub</Link>
               <span style={{ color: "rgba(var(--text-rgb),0.2)", fontSize: 14 }}>/</span>
-              <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>Hypothesis Test Generator</span>
+              <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>Question Generator</span>
             </div>
             <button
               onClick={() => setFormulaOpen(o => !o)}

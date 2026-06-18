@@ -18,7 +18,7 @@ export default function AboutPage() {
             <span style={{ color: "rgba(var(--text-rgb),0.2)", fontSize: 14 }}>/</span>
             <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>About</span>
           </div>
-          <Link href="/start" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practice →</Link>
+          <Link href="/start" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practise →</Link>
         </div>
       </header>
 
@@ -60,13 +60,12 @@ export default function AboutPage() {
           </div>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             {[
-              { initials: "DS", name: "Daniel Sobat", role: "Development & design" },
-              { initials: "VB", name: "Vikram Baliga", role: "Content & statistical review" },
+              { photo: "/daniel-sobat.jpg", name: "Daniel Sobat", role: "Development & design" },
+              { photo: "/vikram-baliga.jpg", name: "Vikram Baliga", role: "Content & statistical review" },
             ].map(c => (
               <div key={c.name} style={{ flex: "1 1 200px", display: "flex", alignItems: "center", gap: 14, padding: "14px 18px", borderRadius: 10, border: "1px solid rgba(var(--text-rgb),0.07)", background: "rgba(var(--text-rgb),0.02)" }}>
-                <div style={{ width: 38, height: 38, borderRadius: "50%", background: "rgba(var(--gold-rgb),0.15)", border: "1px solid rgba(var(--gold-rgb),0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: GOLD_LIGHT, flexShrink: 0 }}>
-                  {c.initials}
-                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={c.photo} alt={c.name} style={{ width: 46, height: 46, borderRadius: "50%", objectFit: "cover", border: "1px solid rgba(var(--gold-rgb),0.25)", flexShrink: 0 }} />
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: "rgba(var(--text-rgb),0.85)" }}>{c.name}</div>
                   <div style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.35)", marginTop: 2 }}>{c.role}</div>
@@ -84,7 +83,7 @@ export default function AboutPage() {
           </div>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
             {[
-              { href: "/practice",     label: "Hypothesis Test Generator", desc: "Unlimited worked practice questions for every test in BIOL 300" },
+              { href: "/practice",     label: "Question Generator", desc: "Unlimited worked practice questions for every test in BIOL 300" },
               { href: "/r-coding",     label: "R Coding Questions",        desc: "Exam-style code review: spot the statistical error (or confirm there isn't one)" },
               { href: "/formula-sheet", label: "Formula Sheet",            desc: "Hover-to-explain interactive formula reference" },
               { href: "/flowchart",    label: "What Test? Flowchart",      desc: "Interactive decision flowchart with chapter filtering" },
@@ -122,11 +121,19 @@ export default function AboutPage() {
           </p>
         </section>
 
-        {/* Source code (placeholder) */}
+        {/* Source code */}
         <section style={{ padding: "16px 20px", borderRadius: 12, border: "1px solid rgba(var(--text-rgb),0.06)", background: "rgba(var(--text-rgb),0.02)" }}>
-          <p style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.3)", margin: 0, lineHeight: 1.6 }}>
-            Source code will be linked here once the site is made public.
+          <p style={{ fontSize: 12, color: "rgba(var(--text-rgb),0.4)", margin: "0 0 6px", lineHeight: 1.6 }}>
+            Source code
           </p>
+          <a
+            href="https://github.com/vbaliga/BIOL300-practicehub"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: 12, color: GOLD, textDecoration: "none", opacity: 0.85 }}
+          >
+            github.com/vbaliga/BIOL300-practicehub →
+          </a>
         </section>
 
         <footer style={{ marginTop: 40, textAlign: "center", fontSize: 11, color: "rgba(var(--text-rgb),0.2)", paddingBottom: 8 }}>

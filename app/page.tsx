@@ -4,7 +4,7 @@ const PRACTICE = [
   {
     href: "/practice",
     symbol: "∑",
-    title: "Hypothesis Test Generator",
+    title: "Question Generator",
     description: "Unlimited worked questions for every test in BIOL 300, with step-by-step solutions.",
   },
   {
@@ -109,7 +109,7 @@ export default function Home() {
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
               <Link href="/about" style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", textDecoration: "none" }}>About</Link>
-              <Link href="/start" className="btn-primary" style={{ padding: "7px 18px", fontSize: 13 }}>Practice</Link>
+              <Link href="/start" className="btn-primary" style={{ padding: "7px 18px", fontSize: 13 }}>Practise</Link>
             </div>
           </div>
         </header>

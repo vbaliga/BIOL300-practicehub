@@ -7,7 +7,7 @@ const OPTIONS = [
   {
     href: "/practice",
     symbol: "∑",
-    label: "Hypothesis Testing",
+    label: "Question Generator",
     description: "Unlimited worked practice questions for every test in BIOL 300 — chi-square, t-tests, ANOVA, regression, and more. Full step-by-step solutions included.",
     cta: "Start practising →",
   },
