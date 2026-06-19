@@ -29,7 +29,7 @@ export default function AboutPage() {
           <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(var(--gold-rgb),0.55)", margin: "0 0 10px" }}>About</p>
           <h1 style={{ fontSize: 30, fontWeight: 800, color: "var(--text)", letterSpacing: "-0.025em", margin: "0 0 14px" }}>BIOL 300 Practice Hub</h1>
           <p style={{ fontSize: 15, color: "rgba(var(--text-rgb),0.5)", lineHeight: 1.7, margin: 0 }}>
-            A free study resource for <strong style={{ color: "rgba(var(--text-rgb),0.75)" }}>BIOL 300 — Fundamentals of Biostatistics</strong> at the University of British Columbia. The site is designed to help students practice hypothesis testing, review formulas, navigate the "what test?" decision process, and avoid common statistical misconceptions.
+            A free study resource for <strong style={{ color: "rgba(var(--text-rgb),0.75)" }}>BIOL 300: Fundamentals of Biostatistics</strong> at the University of British Columbia. The site is designed to help students practice hypothesis testing, write and review R code, navigate the "what test?" decision process, and avoid common statistical misconceptions.
           </p>
         </div>
 
@@ -40,7 +40,7 @@ export default function AboutPage() {
             <h2 style={{ fontSize: 13, fontWeight: 700, color: "rgba(var(--text-rgb),0.7)", margin: 0 }}>About BIOL 300 at UBC</h2>
           </div>
           <p style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.5)", lineHeight: 1.7, margin: "0 0 12px" }}>
-            BIOL 300 is a core course in UBC's Biology undergraduate curriculum covering statistical reasoning for life scientists. Topics include probability, hypothesis testing, confidence intervals, chi-square tests, t-tests, ANOVA, correlation, and linear regression — following the statistical methods covered in the BIOL 300 curriculum.
+            BIOL 300 is a core course in UBC's Biology undergraduate curriculum covering statistical reasoning for life scientists. Topics include probability, hypothesis testing, confidence intervals, chi-square tests, t-tests, ANOVA, correlation, and linear regression, following the statistical methods covered in the BIOL 300 curriculum.
           </p>
           <a
             href="https://www.biology.ubc.ca/course-listing-2/"
@@ -111,10 +111,10 @@ export default function AboutPage() {
             <h2 style={{ fontSize: 13, fontWeight: 700, color: "rgba(var(--text-rgb),0.7)", margin: 0 }}>AI-generated content</h2>
           </div>
           <p style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.5)", lineHeight: 1.75, margin: "0 0 10px" }}>
-            The practice questions on this site — including biological scenarios, organism names, variable descriptions, and numerical values — were generated with the help of <strong style={{ color: "rgba(var(--text-rgb),0.7)" }}>Claude Sonnet 4.6</strong> (Anthropic). These scenarios are <strong style={{ color: "rgba(var(--text-rgb),0.7)" }}>entirely fictional</strong> and should not be treated as real research findings or cited as sources.
+            The practice questions on this site (including biological scenarios, organism names, variable descriptions, and numerical values) were generated with the help of <strong style={{ color: "rgba(var(--text-rgb),0.7)" }}>Claude Sonnet 4.6</strong> (Anthropic). These scenarios are <strong style={{ color: "rgba(var(--text-rgb),0.7)" }}>entirely fictional</strong> and should not be treated as real research findings or cited as sources.
           </p>
           <p style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.5)", lineHeight: 1.75, margin: "0 0 10px" }}>
-            The statistical methodology — test selection logic, worked solutions, and formula content — has been reviewed for correctness by the course instructor. That said, AI-generated content can occasionally contain errors or quirks. If you notice something that seems wrong or unclear, please use the <strong style={{ color: "rgba(var(--text-rgb),0.7)" }}>Report an issue</strong> button at the bottom of any worked answer to flag it.
+            The statistical methodology (test selection logic, worked solutions, and formula content) has been reviewed for correctness by the course instructor. That said, AI-generated content can occasionally contain errors or quirks. If you notice something that seems wrong or unclear, please use the <strong style={{ color: "rgba(var(--text-rgb),0.7)" }}>Report an issue</strong> button at the bottom of any worked answer to flag it.
           </p>
           <p style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.5)", lineHeight: 1.75, margin: 0 }}>
             In contrast, any data from actual published studies (as seen in the course textbook and lecture slides) would be properly cited. No real study data appear on this site without attribution.
