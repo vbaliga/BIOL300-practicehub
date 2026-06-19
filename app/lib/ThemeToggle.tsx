@@ -3,10 +3,28 @@ import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
   const [dark, setDark] = useState(false);
+  const [isPanel, setIsPanel] = useState(false);
 
   useEffect(() => {
+    const panel = new URLSearchParams(window.location.search).get("panel") === "true";
+    setIsPanel(panel);
     if (localStorage.getItem("theme") === "dark") setDark(true);
+
+    if (panel) {
+      // Sync theme from parent page via storage events
+      function onStorage(e: StorageEvent) {
+        if (e.key === "theme") {
+          const next = e.newValue === "dark";
+          setDark(next);
+          document.documentElement.dataset.theme = e.newValue ?? "light";
+        }
+      }
+      window.addEventListener("storage", onStorage);
+      return () => window.removeEventListener("storage", onStorage);
+    }
   }, []);
+
+  if (isPanel) return null;
 
   function toggle() {
     const next = !dark;
