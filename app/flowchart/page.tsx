@@ -258,7 +258,7 @@ function FlowchartVisual({ flowNodes, maxChapter }: { flowNodes: Record<string, 
         nodesConnectable={false}
         elementsSelectable={false}
         fitView
-        fitViewOptions={{ padding: 0.12 }}
+        fitViewOptions={{ padding: 0.35 }}
         style={{ background: "var(--bg)" }}
         proOptions={{ hideAttribution: true }}
       >
