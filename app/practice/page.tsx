@@ -366,13 +366,13 @@ function ToolkitPanel({ panel, onClose }: { panel: "formulas" | "flowchart" | nu
           <>
             <div style={{ flex: 1, overflow: "hidden" }}>
               <iframe
-                src="/flowchart"
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/flowchart`}
                 style={{ width: "100%", height: "100%", border: "none" }}
                 title="What Test? Flowchart"
               />
             </div>
             <div style={{ padding: "12px 20px", borderTop: "1px solid rgba(var(--text-rgb),0.05)", flexShrink: 0 }}>
-              <Link href="/flowchart" target="_blank" style={{ fontSize: 11, color: "var(--gold)", textDecoration: "none", opacity: 0.7 }}>
+              <Link href={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/flowchart`} target="_blank" style={{ fontSize: 11, color: "var(--gold)", textDecoration: "none", opacity: 0.7 }}>
                 Open full flowchart →
               </Link>
             </div>
