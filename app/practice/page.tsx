@@ -527,17 +527,17 @@ export default function PracticePage() {
                 Toolkit {toolkitDropOpen ? "▲" : "▼"}
               </button>
               {toolkitDropOpen && (
-                <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, background: "var(--surface)", border: "1px solid rgba(var(--gold-rgb),0.25)", borderRadius: 10, overflow: "hidden", zIndex: 300, minWidth: 160, boxShadow: "0 8px 24px rgba(0,0,0,0.2)" }}>
+                <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, background: "#002145", border: "1px solid rgba(180,150,80,0.3)", borderRadius: 10, overflow: "hidden", zIndex: 300, minWidth: 180, boxShadow: "0 8px 24px rgba(0,0,0,0.35)" }}>
                   {[
                     { key: "formulas" as const,  label: "Formula Sheet" },
                     { key: "flowchart" as const, label: "What Test? Flowchart" },
                   ].map(opt => (
                     <button key={opt.key} type="button"
                       onClick={() => { setToolkitPanel(toolkitPanel === opt.key ? null : opt.key); setToolkitDropOpen(false); }}
-                      style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 16px", background: toolkitPanel === opt.key ? "rgba(var(--gold-rgb),0.1)" : "transparent", border: "none", color: toolkitPanel === opt.key ? "var(--gold-light)" : "rgba(var(--text-rgb),0.7)", fontSize: 12, fontWeight: 600, cursor: "pointer", textAlign: "left" }}
+                      style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 16px", background: toolkitPanel === opt.key ? "rgba(180,150,80,0.12)" : "transparent", border: "none", borderBottom: "1px solid rgba(255,255,255,0.06)", color: toolkitPanel === opt.key ? "#c9a84c" : "rgba(255,255,255,0.75)", fontSize: 12, fontWeight: 600, cursor: "pointer" }}
                     >
                       {opt.label}
-                      {toolkitPanel === opt.key && <span style={{ fontSize: 10, color: "var(--gold)" }}>✓</span>}
+                      {toolkitPanel === opt.key && <span style={{ fontSize: 10, color: "#c9a84c" }}>✓</span>}
                     </button>
                   ))}
                 </div>
