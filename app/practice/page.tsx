@@ -424,7 +424,6 @@ export default function PracticePage() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [seed, setSeed] = useState(0);
   const [toolkitPanel, setToolkitPanel] = useState<"formulas" | "flowchart" | null>(null);
-  const [toolkitDropOpen, setToolkitDropOpen] = useState(false);
   const [showTestConfig, setShowTestConfig] = useState(false);
   const [mcqOptions, setMcqOptions] = useState<TestType[]>([]);
   const [mcqChoice, setMcqChoice] = useState<TestType | null>(null);
@@ -519,30 +518,7 @@ export default function PracticePage() {
               <span style={{ color: "rgba(var(--text-rgb),0.2)", fontSize: 14 }}>/</span>
               <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>Question Generator</span>
             </div>
-            <div style={{ position: "relative" }}>
-              <button
-                onClick={() => setToolkitDropOpen(o => !o)}
-                style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 8, border: `1px solid ${toolkitPanel ? "rgba(var(--gold-rgb),0.5)" : "rgba(var(--gold-rgb),0.22)"}`, background: toolkitPanel ? "rgba(var(--gold-rgb),0.14)" : "transparent", color: toolkitPanel ? "var(--gold-light)" : "rgba(var(--gold-rgb),0.6)", fontSize: 11, fontWeight: 600, cursor: "pointer", transition: "all 0.15s ease" }}
-              >
-                Toolkit {toolkitDropOpen ? "▲" : "▼"}
-              </button>
-              {toolkitDropOpen && (
-                <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, background: "#002145", border: "1px solid rgba(180,150,80,0.3)", borderRadius: 10, overflow: "hidden", zIndex: 300, minWidth: 180, boxShadow: "0 8px 24px rgba(0,0,0,0.35)" }}>
-                  {[
-                    { key: "formulas" as const,  label: "Formula Sheet" },
-                    { key: "flowchart" as const, label: "What Test? Flowchart" },
-                  ].map(opt => (
-                    <button key={opt.key} type="button"
-                      onClick={() => { setToolkitPanel(toolkitPanel === opt.key ? null : opt.key); setToolkitDropOpen(false); }}
-                      style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 16px", background: toolkitPanel === opt.key ? "rgba(180,150,80,0.12)" : "transparent", border: "none", borderBottom: "1px solid rgba(255,255,255,0.06)", color: toolkitPanel === opt.key ? "#c9a84c" : "rgba(255,255,255,0.75)", fontSize: 12, fontWeight: 600, cursor: "pointer" }}
-                    >
-                      {opt.label}
-                      {toolkitPanel === opt.key && <span style={{ fontSize: 10, color: "#c9a84c" }}>✓</span>}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <Link href="/start" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.6 }}>Home →</Link>
           </div>
         </header>
 
@@ -551,11 +527,31 @@ export default function PracticePage() {
         <main style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px 64px" }}>
 
           {/* Heading */}
-          <div style={{ marginBottom: 28 }}>
+          <div style={{ marginBottom: 20 }}>
             <h1 style={{ fontSize: 28, fontWeight: 800, color: "var(--text)", letterSpacing: "-0.025em", margin: "0 0 6px" }}>Practice Questions</h1>
             <p style={{ fontSize: 14, color: "rgba(var(--text-rgb),0.4)", margin: 0 }}>
               Select your chapter, pick the tests you want to practice, then generate a worked question.
             </p>
+          </div>
+
+          {/* Toolkit buttons */}
+          <div style={{ display: "flex", gap: 10, marginBottom: 24 }}>
+            {([
+              { key: "formulas" as const,  label: "Formula Sheet",       symbol: "Σ" },
+              { key: "flowchart" as const, label: "What Test? Flowchart", symbol: "⟶" },
+            ] as const).map(opt => {
+              const active = toolkitPanel === opt.key;
+              return (
+                <button key={opt.key} type="button"
+                  onClick={() => setToolkitPanel(active ? null : opt.key)}
+                  style={{ flex: 1, display: "flex", alignItems: "center", gap: 10, padding: "12px 18px", borderRadius: 10, border: `1.5px solid ${active ? "rgba(var(--gold-rgb),0.7)" : "rgba(var(--gold-rgb),0.28)"}`, background: active ? "rgba(var(--gold-rgb),0.13)" : "rgba(var(--gold-rgb),0.05)", cursor: "pointer", transition: "all 0.15s ease" }}
+                >
+                  <span style={{ width: 30, height: 30, borderRadius: 8, background: active ? "rgba(var(--gold-rgb),0.22)" : "rgba(var(--gold-rgb),0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, color: "var(--gold)", flexShrink: 0, fontFamily: "ui-serif, Georgia, serif" }}>{opt.symbol}</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: active ? "var(--gold-light)" : "rgba(var(--text-rgb),0.65)" }}>{opt.label}</span>
+                  <span style={{ marginLeft: "auto", fontSize: 11, color: active ? "var(--gold)" : "rgba(var(--gold-rgb),0.4)", fontWeight: 600 }}>{active ? "✕" : "↗"}</span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Controls */}
