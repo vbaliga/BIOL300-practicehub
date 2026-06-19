@@ -366,7 +366,7 @@ function ToolkitPanel({ panel, onClose }: { panel: "formulas" | "flowchart" | nu
           <>
             <div style={{ flex: 1, overflow: "hidden" }}>
               <iframe
-                src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/flowchart`}
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/flowchart?panel=true`}
                 style={{ width: "100%", height: "100%", border: "none" }}
                 title="What Test? Flowchart"
               />

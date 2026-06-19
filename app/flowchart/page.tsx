@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import "@xyflow/react/dist/style.css";
 import {
@@ -421,6 +421,11 @@ export default function FlowchartPage() {
   const [tab,  setTab]  = useState<Tab>("one");
   const [maxCh, setMaxCh] = useState(18);
   const [mode, setMode] = useState<Mode>("visual");
+  const [isPanel, setIsPanel] = useState(false);
+
+  useEffect(() => {
+    setIsPanel(new URLSearchParams(window.location.search).get("panel") === "true");
+  }, []);
 
   const current = TAB_DATA[tab];
 
@@ -431,22 +436,24 @@ export default function FlowchartPage() {
         .fchip:hover { border-color: rgba(var(--gold-rgb),0.5) !important; color: rgba(var(--text-rgb),0.9) !important; }
       `}</style>
 
-      <div style={{ minHeight: "100vh", background: BLUE_DARK }}>
+      <div style={{ minHeight: "100vh", background: BLUE_DARK, zoom: isPanel ? 0.8 : 1 }}>
 
-        {/* Nav */}
-        <header style={{ background: BLUE, borderBottom: "1px solid rgba(var(--gold-rgb),0.18)", position: "sticky", top: 0, zIndex: 50 }}>
-          <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 24px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 3, height: 20, borderRadius: 2, background: GOLD, flexShrink: 0 }} />
-              <Link href="/" style={{ fontSize: 14, fontWeight: 700, color: GOLD, textDecoration: "none" }}>BIOL 300 Practice Hub</Link>
-              <span style={{ color: "rgba(var(--text-rgb),0.2)", fontSize: 14 }}>/</span>
-              <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>What Test?</span>
+        {/* Nav — hidden when embedded in panel */}
+        {!isPanel && (
+          <header style={{ background: BLUE, borderBottom: "1px solid rgba(var(--gold-rgb),0.18)", position: "sticky", top: 0, zIndex: 50 }}>
+            <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 24px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ width: 3, height: 20, borderRadius: 2, background: GOLD, flexShrink: 0 }} />
+                <Link href="/" style={{ fontSize: 14, fontWeight: 700, color: GOLD, textDecoration: "none" }}>BIOL 300 Practice Hub</Link>
+                <span style={{ color: "rgba(var(--text-rgb),0.2)", fontSize: 14 }}>/</span>
+                <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>What Test?</span>
+              </div>
+              <Link href="/practice" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practice →</Link>
             </div>
-            <Link href="/practice" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practice →</Link>
-          </div>
-        </header>
+          </header>
+        )}
 
-        <main style={{ maxWidth: 960, margin: "0 auto", padding: "36px 24px 72px" }}>
+        <main style={{ maxWidth: 960, margin: "0 auto", padding: isPanel ? "20px 16px 40px" : "36px 24px 72px" }}>
 
           {/* Heading + controls row */}
           <div style={{ marginBottom: 28 }}>
