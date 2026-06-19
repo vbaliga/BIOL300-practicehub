@@ -9,7 +9,7 @@ const OPTIONS = [
     symbol: "∑",
     label: "Question Generator",
     description: "Unlimited worked practice questions for every test in BIOL 300 — chi-square, t-tests, ANOVA, regression, and more. Full step-by-step solutions included.",
-    cta: "Start practising →",
+    cta: "Start practicing →",
   },
   {
     href: "/r-coding",
@@ -77,7 +77,7 @@ export default function StartPage() {
               BIOL 300 · Practice
             </p>
             <h1 style={{ fontSize: 32, fontWeight: 800, color: "var(--text)", letterSpacing: "-0.03em", margin: "0 0 12px", lineHeight: 1.2 }}>
-              What would you like to practise?
+              What would you like to practice?
             </h1>
             <p style={{ fontSize: 15, color: "rgba(var(--text-rgb),0.45)", margin: 0, lineHeight: 1.6, maxWidth: 420 }}>
               Choose a question type to get started.

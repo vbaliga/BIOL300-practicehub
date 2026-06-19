@@ -775,7 +775,7 @@ export default function RCodingPage() {
             <span style={{ color: "rgba(var(--text-rgb),0.2)", fontSize: 14 }}>/</span>
             <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>R Coding</span>
           </div>
-          <Link href="/start" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practise →</Link>
+          <Link href="/start" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practice →</Link>
         </div>
       </header>
 

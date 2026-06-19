@@ -109,7 +109,7 @@ export default function Home() {
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
               <Link href="/about" style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", textDecoration: "none" }}>About</Link>
-              <Link href="/start" className="btn-primary" style={{ padding: "7px 18px", fontSize: 13 }}>Practise</Link>
+              <Link href="/start" className="btn-primary" style={{ padding: "7px 18px", fontSize: 13 }}>Practice</Link>
             </div>
           </div>
         </header>
@@ -130,7 +130,7 @@ export default function Home() {
                 </p>
               </div>
               <div style={{ display: "flex", gap: 10, flexShrink: 0, flexWrap: "wrap" }}>
-                <Link href="/start" className="btn-primary" style={{ padding: "9px 22px", fontSize: 13 }}>Start practising</Link>
+                <Link href="/start" className="btn-primary" style={{ padding: "9px 22px", fontSize: 13 }}>Start practicing</Link>
                 <a
                   href="https://biologyprogram-2023.sites.olt.ubc.ca/files/2025/08/Syllabus_BIOL300_2025.pdf"
                   target="_blank"

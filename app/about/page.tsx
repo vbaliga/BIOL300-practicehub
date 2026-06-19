@@ -18,7 +18,7 @@ export default function AboutPage() {
             <span style={{ color: "rgba(var(--text-rgb),0.2)", fontSize: 14 }}>/</span>
             <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>About</span>
           </div>
-          <Link href="/start" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practise →</Link>
+          <Link href="/start" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practice →</Link>
         </div>
       </header>
 
@@ -29,7 +29,7 @@ export default function AboutPage() {
           <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(var(--gold-rgb),0.55)", margin: "0 0 10px" }}>About</p>
           <h1 style={{ fontSize: 30, fontWeight: 800, color: "var(--text)", letterSpacing: "-0.025em", margin: "0 0 14px" }}>BIOL 300 Practice Hub</h1>
           <p style={{ fontSize: 15, color: "rgba(var(--text-rgb),0.5)", lineHeight: 1.7, margin: 0 }}>
-            A free study resource for <strong style={{ color: "rgba(var(--text-rgb),0.75)" }}>BIOL 300 — Fundamentals of Biostatistics</strong> at the University of British Columbia. The site is designed to help students practise hypothesis testing, review formulas, navigate the "what test?" decision process, and avoid common statistical misconceptions.
+            A free study resource for <strong style={{ color: "rgba(var(--text-rgb),0.75)" }}>BIOL 300 — Fundamentals of Biostatistics</strong> at the University of British Columbia. The site is designed to help students practice hypothesis testing, review formulas, navigate the "what test?" decision process, and avoid common statistical misconceptions.
           </p>
         </div>
 

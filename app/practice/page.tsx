@@ -517,7 +517,7 @@ export default function PracticePage() {
           <div style={{ marginBottom: 28 }}>
             <h1 style={{ fontSize: 28, fontWeight: 800, color: "var(--text)", letterSpacing: "-0.025em", margin: "0 0 6px" }}>Practice Questions</h1>
             <p style={{ fontSize: 14, color: "rgba(var(--text-rgb),0.4)", margin: 0 }}>
-              Select your chapter, pick the tests you want to practise, then generate a worked question.
+              Select your chapter, pick the tests you want to practice, then generate a worked question.
             </p>
           </div>
 

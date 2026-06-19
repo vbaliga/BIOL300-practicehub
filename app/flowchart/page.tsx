@@ -442,7 +442,7 @@ export default function FlowchartPage() {
               <span style={{ color: "rgba(var(--text-rgb),0.2)", fontSize: 14 }}>/</span>
               <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>What Test?</span>
             </div>
-            <Link href="/practice" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practise →</Link>
+            <Link href="/practice" style={{ fontSize: 12, fontWeight: 600, color: GOLD_LIGHT, textDecoration: "none", opacity: 0.7 }}>Practice →</Link>
           </div>
         </header>
 
