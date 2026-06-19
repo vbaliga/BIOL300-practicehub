@@ -279,8 +279,9 @@ function FormulaCardSmall({ f }: { f: Formula }) {
   );
 }
 
-function FormulaPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+function ToolkitPanel({ panel, onClose }: { panel: "formulas" | "flowchart" | null; onClose: () => void }) {
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const open = panel !== null;
   const visibleSections = activeSection ? SECTIONS.filter(s => s.id === activeSection) : SECTIONS;
 
   return (
@@ -295,9 +296,9 @@ function FormulaPanel({ open, onClose }: { open: boolean; onClose: () => void })
         }}
       />
 
-      {/* Panel — follows page theme */}
+      {/* Panel */}
       <div style={{
-        position: "fixed", top: 0, right: 0, bottom: 0, width: 400,
+        position: "fixed", top: 0, right: 0, bottom: 0, width: 420,
         background: "var(--surface)",
         borderLeft: "1px solid rgba(var(--gold-rgb),0.25)",
         zIndex: 201,
@@ -310,56 +311,73 @@ function FormulaPanel({ open, onClose }: { open: boolean; onClose: () => void })
         <div style={{ padding: "16px 20px", borderBottom: "1px solid rgba(var(--gold-rgb),0.15)", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 3, height: 16, borderRadius: 2, background: "var(--gold)", flexShrink: 0 }} />
-            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.01em" }}>Formula Sheet</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.01em" }}>
+              {panel === "formulas" ? "Formula Sheet" : "What Test? Flowchart"}
+            </span>
           </div>
-          <button
-            onClick={onClose}
-            style={{ width: 28, height: 28, borderRadius: 8, border: "1px solid rgba(var(--text-rgb),0.1)", background: "rgba(var(--text-rgb),0.05)", color: "rgba(var(--text-rgb),0.5)", fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}
-          >
+          <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: 8, border: "1px solid rgba(var(--text-rgb),0.1)", background: "rgba(var(--text-rgb),0.05)", color: "rgba(var(--text-rgb),0.5)", fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", lineHeight: 1 }}>
             ✕
           </button>
         </div>
 
-        {/* Section filter */}
-        <div style={{ padding: "12px 20px", borderBottom: "1px solid rgba(var(--text-rgb),0.05)", display: "flex", flexWrap: "wrap", gap: 6, flexShrink: 0 }}>
-          <button type="button" onClick={() => setActiveSection(null)}
-            style={{ padding: "3px 10px", borderRadius: 100, fontSize: 10, fontWeight: 600, cursor: "pointer", border: `1px solid ${!activeSection ? "rgba(var(--gold-rgb),0.6)" : "rgba(var(--text-rgb),0.1)"}`, background: !activeSection ? "rgba(var(--gold-rgb),0.14)" : "transparent", color: !activeSection ? "var(--gold-light)" : "rgba(var(--text-rgb),0.4)" }}>
-            All
-          </button>
-          {SECTIONS.map(s => (
-            <button key={s.id} type="button" onClick={() => setActiveSection(activeSection === s.id ? null : s.id)}
-              style={{ padding: "3px 10px", borderRadius: 100, fontSize: 10, fontWeight: 600, cursor: "pointer", border: `1px solid ${activeSection === s.id ? "rgba(var(--gold-rgb),0.6)" : "rgba(var(--text-rgb),0.1)"}`, background: activeSection === s.id ? "rgba(var(--gold-rgb),0.14)" : "transparent", color: activeSection === s.id ? "var(--gold-light)" : "rgba(var(--text-rgb),0.4)" }}>
-              {s.title}
-            </button>
-          ))}
-        </div>
-
-        {/* Scrollable content */}
-        <div style={{ overflowY: "auto", flex: 1, padding: "16px 20px 32px" }}>
-          <p style={{ fontSize: 10, color: "rgba(var(--text-rgb),0.25)", margin: "0 0 16px", letterSpacing: "0.03em" }}>
-            Hover any formula for an explanation.
-          </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-            {visibleSections.map(section => (
-              <div key={section.id}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                  <span style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(var(--gold-rgb),0.55)" }}>{section.title}</span>
-                  <div style={{ flex: 1, height: 1, background: "rgba(var(--gold-rgb),0.08)" }} />
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  {section.formulas.map(f => <FormulaCardSmall key={f.id} f={f} />)}
-                </div>
+        {/* Formula sheet content */}
+        {panel === "formulas" && (
+          <>
+            <div style={{ padding: "12px 20px", borderBottom: "1px solid rgba(var(--text-rgb),0.05)", display: "flex", flexWrap: "wrap", gap: 6, flexShrink: 0 }}>
+              <button type="button" onClick={() => setActiveSection(null)}
+                style={{ padding: "3px 10px", borderRadius: 100, fontSize: 10, fontWeight: 600, cursor: "pointer", border: `1px solid ${!activeSection ? "rgba(var(--gold-rgb),0.6)" : "rgba(var(--text-rgb),0.1)"}`, background: !activeSection ? "rgba(var(--gold-rgb),0.14)" : "transparent", color: !activeSection ? "var(--gold-light)" : "rgba(var(--text-rgb),0.4)" }}>
+                All
+              </button>
+              {SECTIONS.map(s => (
+                <button key={s.id} type="button" onClick={() => setActiveSection(activeSection === s.id ? null : s.id)}
+                  style={{ padding: "3px 10px", borderRadius: 100, fontSize: 10, fontWeight: 600, cursor: "pointer", border: `1px solid ${activeSection === s.id ? "rgba(var(--gold-rgb),0.6)" : "rgba(var(--text-rgb),0.1)"}`, background: activeSection === s.id ? "rgba(var(--gold-rgb),0.14)" : "transparent", color: activeSection === s.id ? "var(--gold-light)" : "rgba(var(--text-rgb),0.4)" }}>
+                  {s.title}
+                </button>
+              ))}
+            </div>
+            <div style={{ overflowY: "auto", flex: 1, padding: "16px 20px 32px" }}>
+              <p style={{ fontSize: 10, color: "rgba(var(--text-rgb),0.25)", margin: "0 0 16px", letterSpacing: "0.03em" }}>
+                Hover any formula for an explanation.
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+                {visibleSections.map(section => (
+                  <div key={section.id}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                      <span style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(var(--gold-rgb),0.55)" }}>{section.title}</span>
+                      <div style={{ flex: 1, height: 1, background: "rgba(var(--gold-rgb),0.08)" }} />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                      {section.formulas.map(f => <FormulaCardSmall key={f.id} f={f} />)}
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
+            <div style={{ padding: "12px 20px", borderTop: "1px solid rgba(var(--text-rgb),0.05)", flexShrink: 0 }}>
+              <Link href="/formula-sheet" target="_blank" style={{ fontSize: 11, color: "var(--gold)", textDecoration: "none", opacity: 0.7 }}>
+                Open full formula sheet →
+              </Link>
+            </div>
+          </>
+        )}
 
-        {/* Footer link */}
-        <div style={{ padding: "12px 20px", borderTop: "1px solid rgba(var(--text-rgb),0.05)", flexShrink: 0 }}>
-          <Link href="/formula-sheet" target="_blank" style={{ fontSize: 11, color: "var(--gold)", textDecoration: "none", opacity: 0.7 }}>
-            Open full formula sheet →
-          </Link>
-        </div>
+        {/* Flowchart content */}
+        {panel === "flowchart" && (
+          <>
+            <div style={{ flex: 1, overflow: "hidden" }}>
+              <iframe
+                src="/flowchart"
+                style={{ width: "100%", height: "100%", border: "none" }}
+                title="What Test? Flowchart"
+              />
+            </div>
+            <div style={{ padding: "12px 20px", borderTop: "1px solid rgba(var(--text-rgb),0.05)", flexShrink: 0 }}>
+              <Link href="/flowchart" target="_blank" style={{ fontSize: 11, color: "var(--gold)", textDecoration: "none", opacity: 0.7 }}>
+                Open full flowchart →
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
@@ -405,7 +423,8 @@ export default function PracticePage() {
   const [question, setQuestion] = useState<GeneratedQuestion | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [seed, setSeed] = useState(0);
-  const [formulaOpen, setFormulaOpen] = useState(false);
+  const [toolkitPanel, setToolkitPanel] = useState<"formulas" | "flowchart" | null>(null);
+  const [toolkitDropOpen, setToolkitDropOpen] = useState(false);
   const [showTestConfig, setShowTestConfig] = useState(false);
   const [mcqOptions, setMcqOptions] = useState<TestType[]>([]);
   const [mcqChoice, setMcqChoice] = useState<TestType | null>(null);
@@ -500,16 +519,34 @@ export default function PracticePage() {
               <span style={{ color: "rgba(var(--text-rgb),0.2)", fontSize: 14 }}>/</span>
               <span style={{ fontSize: 13, color: "rgba(var(--text-rgb),0.55)" }}>Question Generator</span>
             </div>
-            <button
-              onClick={() => setFormulaOpen(o => !o)}
-              style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 8, border: `1px solid ${formulaOpen ? "rgba(var(--gold-rgb),0.5)" : "rgba(var(--gold-rgb),0.22)"}`, background: formulaOpen ? "rgba(var(--gold-rgb),0.14)" : "transparent", color: formulaOpen ? "var(--gold-light)" : "rgba(var(--gold-rgb),0.6)", fontSize: 11, fontWeight: 600, cursor: "pointer", transition: "all 0.15s ease" }}
-            >
-              Formulas
-            </button>
+            <div style={{ position: "relative" }}>
+              <button
+                onClick={() => setToolkitDropOpen(o => !o)}
+                style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 14px", borderRadius: 8, border: `1px solid ${toolkitPanel ? "rgba(var(--gold-rgb),0.5)" : "rgba(var(--gold-rgb),0.22)"}`, background: toolkitPanel ? "rgba(var(--gold-rgb),0.14)" : "transparent", color: toolkitPanel ? "var(--gold-light)" : "rgba(var(--gold-rgb),0.6)", fontSize: 11, fontWeight: 600, cursor: "pointer", transition: "all 0.15s ease" }}
+              >
+                Toolkit {toolkitDropOpen ? "▲" : "▼"}
+              </button>
+              {toolkitDropOpen && (
+                <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, background: "var(--surface)", border: "1px solid rgba(var(--gold-rgb),0.25)", borderRadius: 10, overflow: "hidden", zIndex: 300, minWidth: 160, boxShadow: "0 8px 24px rgba(0,0,0,0.2)" }}>
+                  {[
+                    { key: "formulas" as const,  label: "Formula Sheet" },
+                    { key: "flowchart" as const, label: "What Test? Flowchart" },
+                  ].map(opt => (
+                    <button key={opt.key} type="button"
+                      onClick={() => { setToolkitPanel(toolkitPanel === opt.key ? null : opt.key); setToolkitDropOpen(false); }}
+                      style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 16px", background: toolkitPanel === opt.key ? "rgba(var(--gold-rgb),0.1)" : "transparent", border: "none", color: toolkitPanel === opt.key ? "var(--gold-light)" : "rgba(var(--text-rgb),0.7)", fontSize: 12, fontWeight: 600, cursor: "pointer", textAlign: "left" }}
+                    >
+                      {opt.label}
+                      {toolkitPanel === opt.key && <span style={{ fontSize: 10, color: "var(--gold)" }}>✓</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </header>
 
-        <FormulaPanel open={formulaOpen} onClose={() => setFormulaOpen(false)} />
+        <ToolkitPanel panel={toolkitPanel} onClose={() => setToolkitPanel(null)} />
 
         <main style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px 64px" }}>
 
@@ -807,10 +844,6 @@ export default function PracticePage() {
                       {TEST_LABELS[t]}
                     </li>
                   ))}
-                </ul>
-                <div style={{ fontWeight: 600, color: "rgba(var(--text-rgb),0.7)", marginBottom: 8 }}>Key formulas</div>
-                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 3, fontFamily: "ui-monospace,monospace", fontSize: 11 }}>
-                  {["t = (ȳ − μ₀) / (s / √n)", "χ² = Σ (O−E)² / E", "F = MS_groups / MS_error", "r = SP_xy / √(SS_x · SS_y)", "b = SP_xy / SS_x", "SE_b = √(MS_resid / SS_x)"].map(f => <li key={f}>{f}</li>)}
                 </ul>
               </div>
             </div>
